@@ -1,31 +1,25 @@
 package co.simplon.Doudouxshop;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Persistence;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "produit")
 
-public class Produit implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Produit{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idproduit", unique = true)
 	private int id;
 
-	@Column(name = "nomproduit", nullable = false)
+	@Column(name = "nomproduit",length = 30, nullable = false)
 	private String nom;
 
 	@Column(name = "prix", nullable = false)
@@ -34,7 +28,6 @@ public class Produit implements Serializable {
 	@Column(name = "quantite", nullable = false)
 	private int quantite;
 
-	//private final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("Doudouxshop");
 
 	
 	

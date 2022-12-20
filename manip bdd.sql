@@ -9,12 +9,13 @@ create table produit(
 
 //creer table achat:
 
-create table achat(
+CREATE TABLE achat (
     idproduit int REFERENCES produit(idproduit),
     fournisseur varchar(30),
-    date Date,
+    date Date DEFAULT current_timestamp,
     nbrachat int,
-    livré bool default false);
+    livré bool DEFAULT false
+);
 
 //inserttest :
 

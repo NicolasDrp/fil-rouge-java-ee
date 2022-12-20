@@ -12,7 +12,8 @@ public class Main {
 
         System.out.println("--- Connexion ---"
         		+ "\r1. Compte employé"
-        		+ "\r2. Compte client");
+        		+ "\r2. Compte client"
+        		+ "\r3. Quitter");
 
 
         int selection = 0;
@@ -28,19 +29,42 @@ public class Main {
         
         switch (selection) {
             case 1:
-                System.out.println("Option 1 Ajouter un produit");
-                //ajouter un produit
+                /*
+                *achat //
+                *produit //
+                */
+            	String nom = "livre java";
+            	double prix = 25.99;
+            	int quantite = 12;
+            	
+            	
+            	
+            	Produit produit = new Produit(nom, prix, quantite);
+            	produit.ajoutProduit();
+            	
                 break;
             case 2:
-                System.out.println("Option 2Afficher les produits");
-                //fficher les produits
+            	String nom2 = "livre java";
+            	double prix2 = 25.99;
+            	int quantite2 = 12;
+            	
+            	
+            	
+            	Produit produit2 = new Produit(nom2, prix2, quantite2);
+            	
+            	String nomAchat = "le java de michmich";
+            	int quantiteAchat = 12;
+            	
+                Achat achat = new Achat(produit2, nomAchat, quantiteAchat);
+                achat.ajouterStock();
                 break;
             case 3:
-                System.out.println("Option 3 Quitter");
+                System.out.println("Au revoir !");
                 //quitter
+                System.exit(0);
                 break;
             default:
-                System.out.println("quitter");
+                System.out.println("entrée invalide , entrez un chiffre entre 1 et 3 ");
                 main(null);
                 break;
         }

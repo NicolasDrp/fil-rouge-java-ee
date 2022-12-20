@@ -1,7 +1,10 @@
 package co.simplon.Doudouxshop;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Date;
 
 @Entity
 @Table(name = "achat")
@@ -27,8 +29,8 @@ public class Achat {
     @Column(name = "fournisseur", length = 30)
     private String fournisseur;
 
-    @Column(name = "date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date", nullable = false)
     private Date date;
 
     @Column(name = "nbrachat")
@@ -36,39 +38,40 @@ public class Achat {
 
     @Column(name = "livré", columnDefinition = "boolean default false")
     private boolean livre;
-
   
     
 	/**
 	 * @param idproduit
 	 * @param fournisseur
-	 * @param date
 	 * @param nbrachat
 	 */
-	public Achat(Produit idproduit, String fournisseur, Date date, int nbrachat) {
-		super();
-		this.idproduit = idproduit;
-		this.fournisseur = fournisseur;
-		this.date = date;
-		this.nbrachat = nbrachat;
-	}
+    public Achat(Produit idproduit, String fournisseur, int nbrachat) {
+        this.idproduit = idproduit;
+        this.fournisseur = fournisseur;
+        this.nbrachat = nbrachat;
+    }
+    
 
-	
-	
-	
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
+	public void ajouterStock() {
+        if (idproduit == null) {
+            throw new NullPointerException("L'achat ne possède pas de produit associé");
+        }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
+        EntityManager em = utils.JPA.getEntityManager();
+        if (em == null) {
+            throw new NullPointerException("L'objet EntityManager n'est pas initialisé");
+        }
+
+        em.getTransaction().begin();
+
+        idproduit = em.find(Produit.class, idproduit.getId());
+        idproduit.setQuantite(idproduit.getQuantite() + nbrachat);
+
+        em.getTransaction().commit();
+        em.close();
+    }
+	
+	
 
 	/**
 	 * @return the produit

@@ -59,6 +59,8 @@ public class Achat {
 	public Achat() {
 
 	}
+	
+		
 
 	public void ajoutAchat() {
 
@@ -89,6 +91,53 @@ public class Achat {
 			// Close EntityManager
 			em.close();
 		}
+	}
+	
+	public void ajouterStock2(int idproduit, String fournisseur, int nbrachat) {
+	    try {
+	        EntityManager em = utils.JPA.getEntityManager();
+
+	        em.getTransaction().begin();
+
+	        Produit produitMaj = em.find(Produit.class, idproduit);
+	        produitMaj.setQuantite(produitMaj.getQuantite() + nbrachat);
+
+	        // Create a new Achat object and set its properties
+	        Achat purchase = new Achat();
+	        purchase.setIdproduit(produitMaj);
+	        purchase.setFournisseur(fournisseur);
+	        purchase.setNbrachat(nbrachat);
+	        purchase.setLivre(false);
+
+	        // Save the purchase to the database
+	        em.persist(purchase);
+
+	        em.getTransaction().commit();
+	        em.close();
+	    } catch (NoResultException e) {
+	        e.printStackTrace();
+	        System.out.println("Le produit n'existe pas");
+	    }
+	}
+
+	
+	public void test() {
+		EntityManager em = utils.JPA.getEntityManager();
+
+		em.getTransaction().begin();  // Start a transaction
+
+		Produit product = new Produit("Product Name", 10.50, 0);
+
+		Achat purchase = new Achat();
+		purchase.setIdproduit(product);
+		purchase.setFournisseur("Supplier Name");
+		purchase.setDate(new Date());
+		purchase.setNbrachat(50);
+		purchase.setLivre(false);
+
+		em.persist(purchase);
+		em.getTransaction().commit();
+		em.close();
 	}
 
 	public void ajouterStock(int idproduit, String fournisseur, int nbrachat) {

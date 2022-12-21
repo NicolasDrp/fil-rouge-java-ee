@@ -75,14 +75,14 @@ public class Main {
 
 				modif.changerNom(nommodif, nvnom);
 				break;
-			case 5:// Supprimer un produit
+			case 5:// Supprimer un produit // marche
 				System.out.println("Quel produit souhaitez vous supprimer ?");
 				String nomsup = scan.nextLine();
 
 				Produit sup = new Produit();
 				sup.supprimerProduit(nomsup);
 				break;
-			case 6:// Ajouter du stock à un produit // marche pas
+			case 6:// Ajouter du stock à un produit // marche
 				Achat stock = new Achat();
 				stock.ajouterStock(1, "Oracle.com", 22);
 				break;
@@ -107,7 +107,12 @@ public class Main {
 
 			break;
 		case 2:// CONNEXION CLIENT
+			//Achat.registerPurchase(1, "jajajaaj", 22);
+			Achat achat = new Achat();
+			//achat.ajouterStock2(1, "test", 21);
+			achat.test();
 			
+			System.out.println("ss");
 			break;
 		case 3:
 			System.out.println("Au revoir !");

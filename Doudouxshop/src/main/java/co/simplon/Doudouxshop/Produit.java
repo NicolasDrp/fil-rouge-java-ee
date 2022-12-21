@@ -43,6 +43,10 @@ public class Produit {
 		this.prix = prix;
 		this.quantite = quantite;
 	}
+	
+	public Produit(int id){
+		
+	}
 
 	public Produit() {
 		
@@ -61,7 +65,7 @@ public class Produit {
 			et = em.getTransaction();
 			et.begin();
 
-			// Create and set values for new customer
+			// Create and set values 
 			Produit produit = new Produit(this.nom, this.prix, this.quantite);
 
 			// Save the customer object
@@ -84,7 +88,7 @@ public class Produit {
 	    	EntityManager em = utils.JPA.getEntityManager();
 	    	
 	    	// the lowercase c refers to the object
-	    	String query = "SELECT c FROM Produit c WHERE c.nom LIKE :nomproduit";
+	    	String query = "SELECT c FROM Produit c WHERE LOWER(TRIM(c.nom)) = LOWER(TRIM(:nomproduit))";
 	    	
 	    	// Issue the query and get a matching Customer
 	    	TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
@@ -98,7 +102,7 @@ public class Produit {
 	    	}
 	    	catch(NoResultException ex) {
 	    		ex.printStackTrace();
-	    		System.out.println("ca marhce pas");
+	    		System.out.println("Le produit n'existe pas ou une erreur est survenu");
 	    	}
 	    	finally {
 	    		em.close();
@@ -133,7 +137,7 @@ public class Produit {
 		
 	 	EntityManager em = utils.JPA.getEntityManager();
 	 	EntityTransaction et = null;
-	 	String query = "SELECT p FROM Produit p WHERE p.nom LIKE :nom";
+	 	String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nom))";
 		TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
 		Produit produit = null;
 		tq.setParameter("nom", nom);
@@ -146,6 +150,7 @@ public class Produit {
 			produit.setNom(nvnom);
 			em.persist(produit);
 			et.commit();
+			System.out.println("Le nom du produit a bien été changé");
 		}catch (NoResultException e) {
 			System.out.println("le produit n'a pas pu etre trouver");
 		} catch (Exception ex) {
@@ -160,7 +165,7 @@ public class Produit {
 	 public void supprimerProduit(String nom) {
 		  EntityManager em = utils.JPA.getEntityManager();
 		  EntityTransaction et = null;
-		  String query = "SELECT p FROM Produit p WHERE p.nom = :nomproduit";
+		  String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nomproduit))";
 		  TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
 		  Produit produit = null;
 		  tq.setParameter("nomproduit", nom);
@@ -172,6 +177,7 @@ public class Produit {
 		    produit = em.find(Produit.class, produit.getId());
 		    em.remove(produit);
 		    et.commit();
+		    System.out.println("Le produit a bien été supprimé");
 		  } catch (NoResultException e) {
 		    System.out.println("Ce produit n'existe pas ou ne peut pas etre trouvé");
 		  } catch (Exception ex) {

@@ -5,11 +5,13 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NoResultException;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,13 +32,13 @@ public class Achat {
 	private String fournisseur;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "date", nullable = false)
+	@Column(name = "date")
 	private Date date;
 
 	@Column(name = "nbrachat")
 	private int nbrachat;
 
-	@Column(name = "livré", columnDefinition = "boolean default false")
+	@Column(name = "livre", columnDefinition = "boolean default false")
 	private boolean livre;
 
 	/**
@@ -50,23 +52,61 @@ public class Achat {
 		this.nbrachat = nbrachat;
 	}
 
-	public void ajouterStock() {
-		if (idproduit == null) {
-			throw new NullPointerException("pas de produit associé");
-		}
+	public Achat(int idproduit, String fournisseur, int nbrachat) {
 
+	}
+
+	public Achat() {
+
+	}
+
+	public void ajoutAchat() {
+
+		// The EntityManager class allows operations such as create, read, update,
+		// delete
 		EntityManager em = utils.JPA.getEntityManager();
-		if (em == null) {
-			throw new NullPointerException("EntityManager marche po");
+		// Used to issue transactions on the EntityManager
+		EntityTransaction et = null;
+
+		try {
+			// Get transaction and start
+			et = em.getTransaction();
+			et.begin();
+
+			// Create and set values
+			Achat produit = new Achat(this.idproduit, this.fournisseur, this.nbrachat);
+
+			// Save the customer object
+			em.persist(produit);
+			et.commit();
+		} catch (Exception ex) {
+			// If there is an exception rollback changes
+			if (et != null) {
+				et.rollback();
+			}
+			ex.printStackTrace();
+		} finally {
+			// Close EntityManager
+			em.close();
 		}
+	}
 
-		em.getTransaction().begin();
+	public void ajouterStock(int idproduit, String fournisseur, int nbrachat) {
 
-		idproduit = em.find(Produit.class, idproduit.getId());
-		idproduit.setQuantite(idproduit.getQuantite() + nbrachat);
+		try {
+			EntityManager em = utils.JPA.getEntityManager();
 
-		em.getTransaction().commit();
-		em.close();
+			em.getTransaction().begin();
+
+			Produit produitMaj = em.find(Produit.class, idproduit);
+			produitMaj.setQuantite(produitMaj.getQuantite() + nbrachat);
+
+			em.getTransaction().commit();
+			em.close();
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			System.out.println("Le produit n'existe pas");
+		}
 	}
 
 	/**

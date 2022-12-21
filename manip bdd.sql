@@ -6,6 +6,9 @@ create table produit(
         prix NUMERIC(9,2),
         quantite int);
 
+//inserttest 
+
+insert into produit (idproduit,nomproduit,prix,quantite) values (1,'le java de j-m',32,44);
 
 //creer table achat:
 
@@ -14,7 +17,7 @@ CREATE TABLE achat (
     fournisseur varchar(30),
     date Date DEFAULT current_timestamp,
     nbrachat int,
-    livré bool DEFAULT false
+    livre bool DEFAULT false
 );
 
 //inserttest :
@@ -31,14 +34,14 @@ UPDATE produit
 SET quantite = quantite + achat.nbrachat
 FROM achat
 WHERE produit.idproduit = achat.idproduit
-AND achat.livré = false;
+AND achat.livre = false;
 
 //passer en false quand produit ajouter
 
 UPDATE achat
-SET livré = true
+SET livre = true
 FROM produit
-WHERE achat.livré = false 
+WHERE achat.livre = false 
 AND achat.idproduit = produit.idproduit;
 
 //creer la table panier

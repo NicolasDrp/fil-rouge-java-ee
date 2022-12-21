@@ -12,17 +12,14 @@ import javax.persistence.Table;
 @Table(name = "panier")
 public class Panier {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "idproduit")
-    private Produit idproduit;
+	@ManyToOne
+	@JoinColumn(name = "idproduit")
+	private Produit idproduit;
 
-    
-    
-    
 	/**
 	 * @param idproduit
 	 */
@@ -31,22 +28,6 @@ public class Panier {
 		this.idproduit = idproduit;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * @return the idproduit
 	 */
@@ -60,14 +41,5 @@ public class Panier {
 	public void setIdproduit(Produit idproduit) {
 		this.idproduit = idproduit;
 	}
-
-    
-    
-
-
-
-
-
-
 
 }

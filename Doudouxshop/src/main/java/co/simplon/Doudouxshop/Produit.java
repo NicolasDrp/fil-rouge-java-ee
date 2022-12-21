@@ -1,5 +1,7 @@
 package co.simplon.Doudouxshop;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -7,19 +9,22 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NoResultException;
 import javax.persistence.Table;
+import javax.persistence.TypedQuery;
 
 @Entity
 @Table(name = "produit")
 
-public class Produit{
+public class Produit {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idproduit", unique = true)
 	private int id;
 
-	@Column(name = "nomproduit",length = 30, nullable = false)
+	@Column(name = "nomproduit", length = 30, nullable = false)
 	private String nom;
 
 	@Column(name = "prix", nullable = false)
@@ -28,9 +33,6 @@ public class Produit{
 	@Column(name = "quantite", nullable = false)
 	private int quantite;
 
-
-	
-	
 	/**
 	 * @param nom
 	 * @param prix
@@ -42,7 +44,10 @@ public class Produit{
 		this.quantite = quantite;
 	}
 
-
+	public Produit() {
+		
+	}
+	
 	public void ajoutProduit() {
 
 		// The EntityManager class allows operations such as create, read, update,
@@ -73,6 +78,109 @@ public class Produit{
 			em.close();
 		}
 	}
+
+	
+	 public void getProduit(String nom) {
+	    	EntityManager em = utils.JPA.getEntityManager();
+	    	
+	    	// the lowercase c refers to the object
+	    	String query = "SELECT c FROM Produit c WHERE c.nom LIKE :nomproduit";
+	    	
+	    	// Issue the query and get a matching Customer
+	    	TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+	    	tq.setParameter("nomproduit", nom);
+	    	
+	    	List<Produit> produit = null;
+	    	try {
+	    		// Get matching customer object and output
+	    		produit = tq.getResultList();
+	    		produit.forEach(produitS->System.out.println("\rNom: "+produitS.getNom() + "\rPrix: " + produitS.getPrix()+"\rDisponible: "+produitS.getQuantite()));
+	    	}
+	    	catch(NoResultException ex) {
+	    		ex.printStackTrace();
+	    		System.out.println("ca marhce pas");
+	    	}
+	    	finally {
+	    		em.close();
+	    	}
+	    }
+	
+	
+	// afficher les produit disponibles
+	public void getProduits() {
+		EntityManager em = utils.JPA.getEntityManager();
+
+		// the lowercase p refers to the object
+		String strQuery = "SELECT p FROM Produit p WHERE p.id IS NOT NULL";
+
+		// Issue the query and get a matching Produit
+		TypedQuery<Produit> tq = em.createQuery(strQuery, Produit.class);
+		List<Produit> produit;
+		try {
+			// Get matching Produit object and output
+			produit = tq.getResultList();
+			produit.forEach(prod -> System.out.println(
+					"\rNom: " + prod.getNom() + "\rPrix: " + prod.getPrix() + "\rDisponible: " + prod.getQuantite()));
+		} catch (NoResultException ex) {
+			ex.printStackTrace();
+		} finally {
+			em.close();
+		}
+	}
+	
+	
+	public void changerNom(String nom,String nvnom) {
+		
+	 	EntityManager em = utils.JPA.getEntityManager();
+	 	EntityTransaction et = null;
+	 	String query = "SELECT p FROM Produit p WHERE p.nom LIKE :nom";
+		TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+		Produit produit = null;
+		tq.setParameter("nom", nom);
+		
+		try {
+			produit = tq.getSingleResult();
+			et = em.getTransaction();
+			et.begin();
+			produit = em.find(Produit.class, produit.getId());
+			produit.setNom(nvnom);
+			em.persist(produit);
+			et.commit();
+		}catch (NoResultException e) {
+			System.out.println("le produit n'a pas pu etre trouver");
+		} catch (Exception ex) {
+			if (et != null) {
+				et.rollback();
+			}
+			ex.printStackTrace();
+		}
+	}
+	
+	
+	 public void supprimerProduit(String nom) {
+		  EntityManager em = utils.JPA.getEntityManager();
+		  EntityTransaction et = null;
+		  String query = "SELECT p FROM Produit p WHERE p.nom = :nomproduit";
+		  TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+		  Produit produit = null;
+		  tq.setParameter("nomproduit", nom);
+
+		  try {
+		    produit = tq.getSingleResult();
+		    et = em.getTransaction();
+		    et.begin();
+		    produit = em.find(Produit.class, produit.getId());
+		    em.remove(produit);
+		    et.commit();
+		  } catch (NoResultException e) {
+		    System.out.println("Ce produit n'existe pas ou ne peut pas etre trouvé");
+		  } catch (Exception ex) {
+		    if (et != null) {
+		      et.rollback();
+		    }
+		    ex.printStackTrace();
+		  }
+		}
 
 	/**
 	 * @return the id

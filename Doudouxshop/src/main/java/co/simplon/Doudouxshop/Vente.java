@@ -16,21 +16,18 @@ import javax.persistence.TemporalType;
 @Table(name = "vente")
 public class Vente {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "idproduit")
-    private Produit idproduit;
+	@ManyToOne
+	@JoinColumn(name = "idproduit")
+	private Produit idproduit;
 
-    @Column(name = "dateachat")
-    @Temporal(TemporalType.DATE)
-    private Date dateachat;
+	@Column(name = "dateachat")
+	@Temporal(TemporalType.DATE)
+	private Date dateachat;
 
-    
-    
-    
 	/**
 	 * @param idproduit
 	 * @param dateachat
@@ -41,10 +38,6 @@ public class Vente {
 		this.dateachat = dateachat;
 	}
 
-	
-	
-	
-	
 	/**
 	 * @return the idproduit
 	 */
@@ -73,12 +66,4 @@ public class Vente {
 		this.dateachat = dateachat;
 	}
 
-    
-    
-
-
-
-    
-    
-    
 }

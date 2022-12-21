@@ -5,7 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /**
- * Cette classe fournit une EntityManagerFactory et une EntityManager pour une application Java Persistence API (JPA).
+ * Cette classe fournit une EntityManagerFactory et un EntityManager pour une application Java Persistence API (JPA).
  */
 public class JPA {
   /**

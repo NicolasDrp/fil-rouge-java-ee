@@ -18,60 +18,56 @@ import javax.persistence.TemporalType;
 @Table(name = "achat")
 public class Achat {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "idproduit")
-    private Produit idproduit;
+	@ManyToOne
+	@JoinColumn(name = "idproduit")
+	private Produit idproduit;
 
-    @Column(name = "fournisseur", length = 30)
-    private String fournisseur;
+	@Column(name = "fournisseur", length = 30)
+	private String fournisseur;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date", nullable = false)
-    private Date date;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date", nullable = false)
+	private Date date;
 
-    @Column(name = "nbrachat")
-    private int nbrachat;
+	@Column(name = "nbrachat")
+	private int nbrachat;
 
-    @Column(name = "livré", columnDefinition = "boolean default false")
-    private boolean livre;
-  
-    
+	@Column(name = "livré", columnDefinition = "boolean default false")
+	private boolean livre;
+
 	/**
 	 * @param idproduit
 	 * @param fournisseur
 	 * @param nbrachat
 	 */
-    public Achat(Produit idproduit, String fournisseur, int nbrachat) {
-        this.idproduit = idproduit;
-        this.fournisseur = fournisseur;
-        this.nbrachat = nbrachat;
-    }
-    
+	public Achat(Produit idproduit, String fournisseur, int nbrachat) {
+		this.idproduit = idproduit;
+		this.fournisseur = fournisseur;
+		this.nbrachat = nbrachat;
+	}
 
 	public void ajouterStock() {
-        if (idproduit == null) {
-            throw new NullPointerException("L'achat ne possède pas de produit associé");
-        }
+		if (idproduit == null) {
+			throw new NullPointerException("pas de produit associé");
+		}
 
-        EntityManager em = utils.JPA.getEntityManager();
-        if (em == null) {
-            throw new NullPointerException("L'objet EntityManager n'est pas initialisé");
-        }
+		EntityManager em = utils.JPA.getEntityManager();
+		if (em == null) {
+			throw new NullPointerException("EntityManager marche po");
+		}
 
-        em.getTransaction().begin();
+		em.getTransaction().begin();
 
-        idproduit = em.find(Produit.class, idproduit.getId());
-        idproduit.setQuantite(idproduit.getQuantite() + nbrachat);
+		idproduit = em.find(Produit.class, idproduit.getId());
+		idproduit.setQuantite(idproduit.getQuantite() + nbrachat);
 
-        em.getTransaction().commit();
-        em.close();
-    }
-	
-	
+		em.getTransaction().commit();
+		em.close();
+	}
 
 	/**
 	 * @return the produit
@@ -143,7 +139,4 @@ public class Achat {
 		this.livre = livre;
 	}
 
-   
-    
-    
 }

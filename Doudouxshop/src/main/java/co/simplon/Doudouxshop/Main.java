@@ -49,11 +49,13 @@ public class Main {
 			case 1:// Afficher les produit disponible // marche
 				Produit list = new Produit();
 				list.getProduits();
+				//main(null);
 				break;
 			case 2:// chercher un produit en particulier // marche
 				Produit prod = new Produit();
 				String nomprod = "t-shirt j-m";
 				prod.getProduit(nomprod);
+				//main(null);
 				break;
 			case 3:// Ajouter un produit // marche
 				System.out.println("Nom du produit: ");
@@ -69,9 +71,13 @@ public class Main {
 				produit.ajoutProduit();
 				break;
 			case 4:// modifier un produit // marche
+				System.out.println("Nom du produit: ");
+				String nommodif = scan.nextLine();
+				
 				Produit modif = new Produit();
-				String nommodif = "t-shirt j-m";
-				String nvnom = "T-shirt j-m";
+				
+				System.out.println("Nouveau nom du produit: ");
+				String nvnom = scan.nextLine();
 
 				modif.changerNom(nommodif, nvnom);
 				break;

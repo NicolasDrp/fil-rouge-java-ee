@@ -13,12 +13,13 @@ insert into produit (idproduit,nomproduit,prix,quantite) values (1,'le java de j
 //creer table achat:
 
 CREATE TABLE achat (
+    idachat SERIAL primary key,
     idproduit int REFERENCES produit(idproduit),
     fournisseur varchar(30),
     date Date DEFAULT current_timestamp,
-    nbrachat int,
-    livre bool DEFAULT false
+    nbrachat int
 );
+
 
 //inserttest :
 

@@ -13,16 +13,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NoResultException;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "achat")
+
 public class Achat {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(name = "idachat", unique = true)
+	private int idachat;
 
 	@ManyToOne
 	@JoinColumn(name = "idproduit")
@@ -31,7 +31,6 @@ public class Achat {
 	@Column(name = "fournisseur", length = 30)
 	private String fournisseur;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "date")
 	private Date date;
 
@@ -46,23 +45,25 @@ public class Achat {
 	 * @param fournisseur
 	 * @param nbrachat
 	 */
-	public Achat(Produit idproduit, String fournisseur, int nbrachat) {
+	/*public Achat(Produit idproduit, String fournisseur, int nbrachat) {
 		this.idproduit = idproduit;
 		this.fournisseur = fournisseur;
 		this.nbrachat = nbrachat;
-	}
+	}*/
 
-	public Achat(int idproduit, String fournisseur, int nbrachat) {
-
-	}
 
 	public Achat() {
 
 	}
 	
+	public Achat(int idproduit, String fournisseur, int nbrachat,Date date) {
+
+	}
+	
 		
 
-	public void ajoutAchat() {
+	
+	public void ajoutAchat(int idproduit, String fournisseur, int nbrachat,Date date) {
 
 		// The EntityManager class allows operations such as create, read, update,
 		// delete
@@ -75,11 +76,11 @@ public class Achat {
 			et = em.getTransaction();
 			et.begin();
 
-			// Create and set values
-			Achat produit = new Achat(this.idproduit, this.fournisseur, this.nbrachat);
+			// Create and set values 
+			Achat achat = new Achat(idproduit,fournisseur,nbrachat,date);
 
 			// Save the customer object
-			em.persist(produit);
+			em.persist(achat);
 			et.commit();
 		} catch (Exception ex) {
 			// If there is an exception rollback changes
@@ -93,52 +94,46 @@ public class Achat {
 		}
 	}
 	
-	public void ajouterStock2(int idproduit, String fournisseur, int nbrachat) {
-	    try {
-	        EntityManager em = utils.JPA.getEntityManager();
-
-	        em.getTransaction().begin();
-
-	        Produit produitMaj = em.find(Produit.class, idproduit);
-	        produitMaj.setQuantite(produitMaj.getQuantite() + nbrachat);
-
-	        // Create a new Achat object and set its properties
-	        Achat purchase = new Achat();
-	        purchase.setIdproduit(produitMaj);
-	        purchase.setFournisseur(fournisseur);
-	        purchase.setNbrachat(nbrachat);
-	        purchase.setLivre(false);
-
-	        // Save the purchase to the database
-	        em.persist(purchase);
-
-	        em.getTransaction().commit();
-	        em.close();
-	    } catch (NoResultException e) {
-	        e.printStackTrace();
-	        System.out.println("Le produit n'existe pas");
-	    }
-	}
-
 	
-	public void test() {
+	public void ajoutProduit( String fournisseur, int nbrachat) {
+
+		// The EntityManager class allows operations such as create, read, update,
+		// delete
 		EntityManager em = utils.JPA.getEntityManager();
+		// Used to issue transactions on the EntityManager
+		EntityTransaction et = null;
 
-		em.getTransaction().begin();  // Start a transaction
+		try {
+			// Get transaction and start
+			et = em.getTransaction();
+			et.begin();
 
-		Produit product = new Produit("Product Name", 10.50, 0);
+			// Create and set values 
+			Achat achat = new Achat();
+			setDate(date);
+			setFournisseur(fournisseur);
+			setNbrachat(nbrachat);
+			
+			
 
-		Achat purchase = new Achat();
-		purchase.setIdproduit(product);
-		purchase.setFournisseur("Supplier Name");
-		purchase.setDate(new Date());
-		purchase.setNbrachat(50);
-		purchase.setLivre(false);
-
-		em.persist(purchase);
-		em.getTransaction().commit();
-		em.close();
+			// Save the customer object
+			em.persist(achat);
+			et.commit();
+			
+			System.out.println(getFournisseur());
+			
+		} catch (Exception ex) {
+			// If there is an exception rollback changes
+			if (et != null) {
+				et.rollback();
+			}
+			ex.printStackTrace();
+		} finally {
+			// Close EntityManager
+			em.close();
+		}
 	}
+	
 
 	public void ajouterStock(int idproduit, String fournisseur, int nbrachat) {
 
@@ -158,6 +153,11 @@ public class Achat {
 		}
 	}
 
+	
+	
+	
+	
+	
 	/**
 	 * @return the produit
 	 */

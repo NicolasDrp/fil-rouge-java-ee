@@ -1,5 +1,7 @@
 package co.simplon.Doudouxshop;
 
+
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -89,12 +91,25 @@ public class Main {
 				sup.supprimerProduit(nomsup);
 				break;
 			case 6:// Ajouter du stock à un produit // marche
+				System.out.println("Entrez l'id du produit");
+				int id = scan.nextInt();
+				scan.nextLine();
+				
+				System.out.println("Entrez le nom du fournisseur du produit");
+				String nomfour = scan.nextLine();
+				
+				System.out.println("Entrez le nombre de produit livré du produit");
+				int nbrprod = scan.nextInt();
+				scan.nextLine();
+				
 				Achat stock = new Achat();
-				stock.ajouterStock(1, "Oracle.com", 22);
+				stock.ajouterStock(id,nomfour,nbrprod);
 				break;
 			case 7:// Afficher l'historique des achat
-				Achat achat = new Achat(1,"oracle",10);
-				achat.ajoutAchat();
+
+				Achat achat = new Achat();
+				System.out.println(achat.getFournisseur());
+				//achat.ajoutAchat(1,"oracle",10,new Date());
 				break;
 
 			case 8:// Retour au menu de connexion
@@ -113,12 +128,13 @@ public class Main {
 
 			break;
 		case 2:// CONNEXION CLIENT
-			//Achat.registerPurchase(1, "jajajaaj", 22);
-			Achat achat = new Achat();
-			//achat.ajouterStock2(1, "test", 21);
-			achat.test();
 			
-			System.out.println("ss");
+			Achat achat = new Achat();
+			achat.ajoutProduit("oracle",10);
+			System.out.println(achat.getNbrachat());
+			achat.setFournisseur("tonpere");
+			System.out.println(achat.getFournisseur());
+			
 			break;
 		case 3:
 			System.out.println("Au revoir !");

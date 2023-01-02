@@ -132,29 +132,51 @@ public class Main {
 
 			break;
 		case 2:// CONNEXION CLIENT
+			/*
+			 * vente // produit // panier
+			 */
+
+			System.out.println(
+					"Que voulez vous faire?" + "\r1. Afficher les produit disponible" + "\r2. Rechercher un produit"
+							+ "\r3. Ajouter un produit au panier" + "\r4. Supprimer un produit" + "\r5. Afficher le panier"
+							+ "\r6. Passer commande" + "\r7. Retour au menu de connexion" + "\r8. Quitter");
 			
-			int choix = scan.nextInt();
-			scan.nextLine();
+			selection = 0;
+			while (selection == 0 || selection < 1 || selection > 9) {
+				try {
+					System.out.print("\rIndiquez votre choix : ");
+					selection = scan.nextInt();
+					scan.nextLine();
+				} catch (InputMismatchException e) {
+					System.out.println("Veuillez entrer un chiffre.");
+					scan.nextLine();
+				}
+			}
 			
-			switch (choix) {
+			switch (selection) {
 			case 1:
 				//afficher la liste de tout les produit
+				Produit list = new Produit();
+				list.getProduits();
 				
 				break;
 			case 2:
-				//rechrcher un produit en particulier
+				//rechercher un produit en particulier
 				
 				break;
 			case 3:
 				//ajouter un produit au panier
 				
-				
 				break;
 			case 4:
-				//afficher la panier
+				//supprimer un produit au panier
 				
 				break;
 			case 5:
+				//afficher le panier
+				
+				break;
+			case 6:
 				//passer commande
 				
 				break;

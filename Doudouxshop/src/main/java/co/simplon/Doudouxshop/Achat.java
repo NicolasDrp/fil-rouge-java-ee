@@ -37,9 +37,6 @@ public class Achat {
 	@Column(name = "nbrachat")
 	private int nbrachat;
 
-	@Column(name = "livre", columnDefinition = "boolean default false")
-	private boolean livre;
-
 	/**
 	 * @param idproduit
 	 * @param fournisseur
@@ -212,20 +209,6 @@ public class Achat {
 	 */
 	public void setNbrachat(int nbrachat) {
 		this.nbrachat = nbrachat;
-	}
-
-	/**
-	 * @return the livre
-	 */
-	public boolean isLivre() {
-		return livre;
-	}
-
-	/**
-	 * @param livre the livre to set
-	 */
-	public void setLivre(boolean livre) {
-		this.livre = livre;
 	}
 
 }

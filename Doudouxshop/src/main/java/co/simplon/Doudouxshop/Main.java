@@ -1,7 +1,5 @@
 package co.simplon.Doudouxshop;
 
-
-import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -107,9 +105,15 @@ public class Main {
 				break;
 			case 7:// Afficher l'historique des achat
 
-				Achat achat = new Achat();
-				System.out.println(achat.getFournisseur());
+				//Achat achat = new Achat();
+				//System.out.println(achat.getFournisseur());
 				//achat.ajoutAchat(1,"oracle",10,new Date());
+				Achat achat = new Achat();
+				achat.ajoutProduit("oracle",10);
+				System.out.println(achat.getNbrachat());
+				achat.setFournisseur("tonpere");
+				System.out.println(achat.getFournisseur());
+				
 				break;
 
 			case 8:// Retour au menu de connexion
@@ -129,11 +133,35 @@ public class Main {
 			break;
 		case 2:// CONNEXION CLIENT
 			
-			Achat achat = new Achat();
-			achat.ajoutProduit("oracle",10);
-			System.out.println(achat.getNbrachat());
-			achat.setFournisseur("tonpere");
-			System.out.println(achat.getFournisseur());
+			int choix = scan.nextInt();
+			scan.nextLine();
+			
+			switch (choix) {
+			case 1:
+				//afficher la liste de tout les produit
+				
+				break;
+			case 2:
+				//rechrcher un produit en particulier
+				
+				break;
+			case 3:
+				//ajouter un produit au panier
+				
+				
+				break;
+			case 4:
+				//afficher la panier
+				
+				break;
+			case 5:
+				//passer commande
+				
+				break;
+
+			default:
+				break;
+			}
 			
 			break;
 		case 3:

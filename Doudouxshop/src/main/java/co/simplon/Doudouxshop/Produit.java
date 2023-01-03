@@ -18,7 +18,6 @@ import javax.persistence.TypedQuery;
 
 public class Produit {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idproduit", unique = true)
@@ -43,15 +42,15 @@ public class Produit {
 		this.prix = prix;
 		this.quantite = quantite;
 	}
-	
-	public Produit(int id){
-		
+
+	public Produit(int id) {
+
 	}
 
 	public Produit() {
-		
+
 	}
-	
+
 	public void ajoutProduit() {
 
 		// The EntityManager class allows operations such as create, read, update,
@@ -65,12 +64,14 @@ public class Produit {
 			et = em.getTransaction();
 			et.begin();
 
-			// Create and set values 
+			// Create and set values
 			Produit produit = new Produit(this.nom, this.prix, this.quantite);
 
 			// Save the customer object
 			em.persist(produit);
 			et.commit();
+			
+			System.out.println("Le produit a bien été ajouté");
 		} catch (Exception ex) {
 			// If there is an exception rollback changes
 			if (et != null) {
@@ -79,37 +80,34 @@ public class Produit {
 			ex.printStackTrace();
 		} finally {
 			// Close EntityManager
-			em.close();
+			//em.close();
 		}
 	}
 
-	
-	 public void getProduit(String nom) {
-	    	EntityManager em = utils.JPA.getEntityManager();
-	    	
-	    	// the lowercase c refers to the object
-	    	String query = "SELECT c FROM Produit c WHERE LOWER(TRIM(c.nom)) = LOWER(TRIM(:nomproduit))";
-	    	
-	    	// Issue the query and get a matching Customer
-	    	TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
-	    	tq.setParameter("nomproduit", nom);
-	    	
-	    	List<Produit> produit = null;
-	    	try {
-	    		// Get matching customer object and output
-	    		produit = tq.getResultList();
-	    		produit.forEach(produitS->System.out.println("\rNom: "+produitS.getNom() + "\rPrix: " + produitS.getPrix()+"\rDisponible: "+produitS.getQuantite()));
-	    	}
-	    	catch(NoResultException ex) {
-	    		ex.printStackTrace();
-	    		System.out.println("Le produit n'existe pas ou une erreur est survenu");
-	    	}
-	    	finally {
-	    		em.close();
-	    	}
-	    }
-	
-	
+	public void getProduit(String nom) {
+		EntityManager em = utils.JPA.getEntityManager();
+
+		// the lowercase c refers to the object
+		String query = "SELECT c FROM Produit c WHERE LOWER(TRIM(c.nom)) = LOWER(TRIM(:nomproduit))";
+
+		// Issue the query and get a matching Customer
+		TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+		tq.setParameter("nomproduit", nom);
+
+		List<Produit> produit = null;
+		try {
+			// Get matching customer object and output
+			produit = tq.getResultList();
+			produit.forEach(produitS -> System.out.println("\rNom: " + produitS.getNom() + "\rPrix: "
+					+ produitS.getPrix() +"€" + "\rDisponible: " + produitS.getQuantite()));
+		} catch (NoResultException ex) {
+			ex.printStackTrace();
+			System.out.println("Le produit n'existe pas ou une erreur est survenu");
+		} finally {
+			//em.close();
+		}
+	}
+
 	// afficher les produit disponibles
 	public void getProduits() {
 		EntityManager em = utils.JPA.getEntityManager();
@@ -124,24 +122,23 @@ public class Produit {
 			// Get matching Produit object and output
 			produit = tq.getResultList();
 			produit.forEach(prod -> System.out.println(
-					"\rNom: " + prod.getNom() + "\rPrix: " + prod.getPrix() + "\rDisponible: " + prod.getQuantite()));
+					"\rNom: " + prod.getNom() + "\rPrix: " + prod.getPrix() +"€"+ "\rDisponible: " + prod.getQuantite()));
 		} catch (NoResultException ex) {
 			ex.printStackTrace();
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
-	
-	
-	public void changerNom(String nom,String nvnom) {
-		
-	 	EntityManager em = utils.JPA.getEntityManager();
-	 	EntityTransaction et = null;
-	 	String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nom))";
+
+	public void changerNom(String nom, String nvnom) {
+
+		EntityManager em = utils.JPA.getEntityManager();
+		EntityTransaction et = null;
+		String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nom))";
 		TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
 		Produit produit = null;
 		tq.setParameter("nom", nom);
-		
+
 		try {
 			produit = tq.getSingleResult();
 			et = em.getTransaction();
@@ -151,7 +148,7 @@ public class Produit {
 			em.persist(produit);
 			et.commit();
 			System.out.println("Le nom du produit a bien été changé");
-		}catch (NoResultException e) {
+		} catch (NoResultException e) {
 			System.out.println("le produit n'a pas pu etre trouver");
 		} catch (Exception ex) {
 			if (et != null) {
@@ -160,33 +157,32 @@ public class Produit {
 			ex.printStackTrace();
 		}
 	}
-	
-	
-	 public void supprimerProduit(String nom) {
-		  EntityManager em = utils.JPA.getEntityManager();
-		  EntityTransaction et = null;
-		  String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nomproduit))";
-		  TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
-		  Produit produit = null;
-		  tq.setParameter("nomproduit", nom);
 
-		  try {
-		    produit = tq.getSingleResult();
-		    et = em.getTransaction();
-		    et.begin();
-		    produit = em.find(Produit.class, produit.getId());
-		    em.remove(produit);
-		    et.commit();
-		    System.out.println("Le produit a bien été supprimé");
-		  } catch (NoResultException e) {
-		    System.out.println("Ce produit n'existe pas ou ne peut pas etre trouvé");
-		  } catch (Exception ex) {
-		    if (et != null) {
-		      et.rollback();
-		    }
-		    ex.printStackTrace();
-		  }
+	public void supprimerProduit(String nom) {
+		EntityManager em = utils.JPA.getEntityManager();
+		EntityTransaction et = null;
+		String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nomproduit))";
+		TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+		Produit produit = null;
+		tq.setParameter("nomproduit", nom);
+
+		try {
+			produit = tq.getSingleResult();
+			et = em.getTransaction();
+			et.begin();
+			produit = em.find(Produit.class, produit.getId());
+			em.remove(produit);
+			et.commit();
+			System.out.println("Le produit a bien été supprimé");
+		} catch (NoResultException e) {
+			System.out.println("Ce produit n'existe pas ou ne peut pas etre trouvé");
+		} catch (Exception ex) {
+			if (et != null) {
+				et.rollback();
+			}
+			ex.printStackTrace();
 		}
+	}
 
 	/**
 	 * @return the id

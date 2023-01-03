@@ -1,4 +1,4 @@
-//creer table produit:
+--creer table produit:
 
 create table produit(
         idproduit SERIAL primary key,
@@ -6,11 +6,11 @@ create table produit(
         prix NUMERIC(9,2),
         quantite int);
 
-//inserttest 
+--inserttest 
 
 insert into produit (idproduit,nomproduit,prix,quantite) values (1,'le java de j-m',32,44);
 
-//creer table achat:
+--creer table achat:
 
 CREATE TABLE achat (
     idachat SERIAL primary key,
@@ -21,57 +21,54 @@ CREATE TABLE achat (
 );
 
 
-//inserttest :
+--inserttest :
 
 insert into achat (idproduit,fournisseur,date,nbrachat) values (1,'java.com','13-12-2022',23);
 
-//test liaison:
+--test liaison:
 
 select nomproduit,prix from achat inner join produit on produit.idproduit=achat.idproduit;
 
-//test ajout prod :
+--test ajout prod :
 
 UPDATE produit
 SET quantite = quantite + achat.nbrachat
 FROM achat
 WHERE produit.idproduit = achat.idproduit
-AND achat.livre = false;
 
-//passer en false quand produit ajouter
+--afficher l historique des achat
 
-UPDATE achat
-SET livre = true
-FROM produit
-WHERE achat.livre = false 
-AND achat.idproduit = produit.idproduit;
+select nomproduit,achat.idproduit,fournisseur,date,nbrachat from achat 
+inner join produit on produit.idproduit = achat.idproduit
+order by date;
 
-//creer la table panier
+--creer la table panier
 
 create table panier (
 idproduit int references produit(idproduit));
 
-//insert:
+--insert:
 
 insert into panier values (1);
 
-//test:
+--test:
 
 select nomproduit,prix from panier inner join produit on produit.idproduit=panier.idproduit; 
 
-//creer table vente
+--creer table vente
 
 create table vente (
 idproduit int references produit (idproduit),
 dateachat date);
 
 
-//passer les données de panier vers vente
+--passer les données de panier vers vente
 
 INSERT INTO vente (idproduit, dateachat)
 SELECT idproduit, CURRENT_DATE
 FROM panier;
 
-//vider le panier
+--vider le panier
 
 TRUNCATE TABLE panier;
 

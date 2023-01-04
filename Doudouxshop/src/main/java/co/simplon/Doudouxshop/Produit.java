@@ -21,7 +21,7 @@ public class Produit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idproduit", unique = true)
-	private int id;
+	private int idproduit;
 
 	@Column(name = "nomproduit", length = 30, nullable = false)
 	private String nom;
@@ -85,28 +85,69 @@ public class Produit {
 	}
 
 	public void getProduit(String nom) {
-		EntityManager em = utils.JPA.getEntityManager();
+	    EntityManager em = utils.JPA.getEntityManager();
 
-		// the lowercase c refers to the object
-		String query = "SELECT c FROM Produit c WHERE LOWER(TRIM(c.nom)) = LOWER(TRIM(:nomproduit))";
+	    // the lowercase c refers to the object
+	    String query = "SELECT c FROM Produit c WHERE LOWER(TRIM(c.nom)) = LOWER(TRIM(:nomproduit))";
 
-		// Issue the query and get a matching Customer
-		TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
-		tq.setParameter("nomproduit", nom);
+	    // Issue the query and get a matching Customer
+	    TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+	    tq.setParameter("nomproduit", nom);
 
-		List<Produit> produit = null;
-		try {
-			// Get matching customer object and output
-			produit = tq.getResultList();
-			produit.forEach(produitS -> System.out.println("\rNom: " + produitS.getNom() + "\rPrix: "
-					+ produitS.getPrix() +"€" + "\rDisponible: " + produitS.getQuantite()));
-		} catch (NoResultException ex) {
-			ex.printStackTrace();
-			System.out.println("Le produit n'existe pas ou une erreur est survenu");
-		} finally {
-			//em.close();
-		}
+	    List<Produit> produit = null;
+	    try {
+	        // Get matching customer object and output
+	        produit = tq.getResultList();
+	    } catch (NoResultException ex) {
+	        ex.printStackTrace();
+	        System.out.println("Le produit n'existe pas ou une erreur est survenu");
+	    } finally {
+	        //em.close();
+	    }
+	    
+	    //si aucun produit n'est trouvé
+	    if (produit == null || produit.isEmpty()) {
+	        System.out.println("Aucun produit trouvé");
+	    //sinon afficher le produit
+	    } else {
+	        produit.forEach(produitS -> System.out.println("\rNom: " + produitS.getNom() + "\rPrix: "
+	                + produitS.getPrix() +"€" + "\rDisponible: " + produitS.getQuantite()));
+	    }
 	}
+	
+	
+	public int getProduitId(String nom) {
+	    EntityManager em = utils.JPA.getEntityManager();
+
+	    // Modify the query to only select the id field of the product
+	    String query = "SELECT c.id FROM Produit c WHERE LOWER(TRIM(c.nom)) = LOWER(TRIM(:nomproduit))";
+
+	    // Issue the query and get a list of product ids
+	    TypedQuery<Integer> tq = em.createQuery(query, Integer.class);
+	    tq.setParameter("nomproduit", nom);
+
+	    List<Integer> produitIds = null;
+	    try {
+	        // Get list of product ids
+	        produitIds = tq.getResultList();
+	    } catch (NoResultException ex) {
+	        ex.printStackTrace();
+	        System.out.println("Le produit n'existe pas ou une erreur est survenu");
+	    } finally {
+	        //em.close();
+	    }
+	    
+	    // If no product was found, return -1
+	    if (produitIds == null || produitIds.isEmpty()) {
+	        return -1;
+	    }
+	    // Otherwise, return the id of the first product in the list
+	    else {
+	        return produitIds.get(0);
+	    }
+	}
+
+
 
 	// afficher les produit disponibles
 	public void getProduits() {
@@ -188,14 +229,14 @@ public class Produit {
 	 * @return the id
 	 */
 	public int getId() {
-		return id;
+		return idproduit;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
-		this.id = id;
+		this.idproduit = id;
 	}
 
 	/**

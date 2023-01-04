@@ -28,7 +28,7 @@ public class Achat {
 
 	@ManyToOne
 	@JoinColumn(name = "idproduit")
-	private Produit produit;
+	private Produit idproduit;
 
 	@Column(name = "fournisseur")
 	private String fournisseur;
@@ -47,7 +47,7 @@ public class Achat {
 	 */
 	public Achat(Produit produit, String fournisseur, Calendar date, Integer nbrAchat) {
 		super();
-		this.produit = produit;
+		this.idproduit = produit;
 		this.fournisseur = fournisseur;
 		this.date = date;
 		this.nbrAchat = nbrAchat;
@@ -106,7 +106,7 @@ public class Achat {
 			et.begin();
 
 			// Create and set values
-			Achat achat = new Achat(this.produit, this.fournisseur, this.date, this.nbrAchat);
+			Achat achat = new Achat(this.idproduit, this.fournisseur, this.date, this.nbrAchat);
 
 			// Save the customer object
 			em.persist(achat);
@@ -129,7 +129,7 @@ public class Achat {
 	
 	
 	// afficher l'historique des achats
-	public void getPurchaseHistoryMarche() {
+	public void AfficherHistorique() {
 	    EntityManager em = utils.JPA.getEntityManager();
 
 	    // the lowercase a refers to the Achat object
@@ -205,14 +205,14 @@ public class Achat {
 	 * @return the produit
 	 */
 	public Produit getProduit() {
-		return produit;
+		return idproduit;
 	}
 
 	/**
 	 * @param produit the produit to set
 	 */
 	public void setProduit(Produit produit) {
-		this.produit = produit;
+		this.idproduit = produit;
 	}
 
 	/**

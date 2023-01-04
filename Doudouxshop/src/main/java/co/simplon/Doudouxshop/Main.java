@@ -145,7 +145,7 @@ public class Main {
 
 			case 7:// Afficher l'historique des achat // afficher le nom des produit aussi
 				Achat achat = new Achat();
-				achat.getPurchaseHistoryMarche();
+				achat.AfficherHistorique();;
 
 				main(null);
 				break;
@@ -184,7 +184,7 @@ public class Main {
 					+ "\r8. Quitter");
 
 			selection = 0;
-			while (selection == 0 || selection < 1 || selection > 9) {
+			while (selection == 0 || selection < 1 || selection > 8) {
 				try {
 					System.out.print("\rIndiquez votre choix : ");
 					selection = scan.nextInt();
@@ -216,29 +216,73 @@ public class Main {
 				break;
 
 			case 3:
+				
 				// ajouter un produit au panier // marche pas encore
+				System.out.println("\rQuel produit voulez vous ajouter au panier ?");
+				Produit panierprod = new Produit();
+				String nompanierprod = scan.nextLine();
+				panierprod.getProduit(nompanierprod);
+				
+				System.out.println("\rConfirmer ajout au panier"
+						+ "\r1. Oui"
+						+ "\r2. Non");
+				
+				selection = 0;
+				while (selection == 0 || selection < 1 || selection > 2) {
+					try {
+						System.out.print("\rIndiquez votre choix : ");
+						selection = scan.nextInt();
+						scan.nextLine();
+					} catch (InputMismatchException e) {
+						System.out.println("Veuillez entrer un chiffre.");
+						scan.nextLine();
+					}
+				}
+				
+				if (selection==1) {
+					Produit cartprod = new Produit();
+					cartprod.getProduit(nompanierprod);
+
+					Panier cart = new Panier();
+					//récuperer l'id du produit
+					cartprod.setId(cartprod.getProduitId(nompanierprod));
+					// Ajouter le produit au panier
+					cart.ajouterPanier(cartprod);
+				}
+					System.out.println("Retour au menu");
+					main(null);
 				
 				break;
 
 			case 4:
 
-				// supprimer un produit au panier
+				// supprimer un produit du panier
 				
 				break;
 
 			case 5:
 
 				// afficher le panier
-
+				Panier panier = new Panier();
+				panier.printCartContents();
+				
 				break;
 
 			case 6:
 
 				// passer commande
+				
+				break;
+			case 7:// Retour au menu de connexion
 
+				main(null);
 				break;
 
-			default:
+			case 8:// Quitter
+
+				System.out.println("Au revoir !");
+				System.exit(0);
+				main(null);
 				break;
 			}
 

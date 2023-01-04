@@ -8,7 +8,7 @@ create table produit(
 
 --inserttest 
 
-insert into produit (idproduit,nomproduit,prix,quantite) values (1,'le java de j-m',32,44);
+insert into produit (idproduit,nomproduit,prix,quantite) values (1,'le java de J-M',32,44);
 
 --creer table achat:
 
@@ -51,7 +51,7 @@ idproduit int references produit(idproduit));
 
 insert into panier values (1);
 
---test:
+--test affichage nomproduit prix:
 
 select nomproduit,prix from panier inner join produit on produit.idproduit=panier.idproduit; 
 

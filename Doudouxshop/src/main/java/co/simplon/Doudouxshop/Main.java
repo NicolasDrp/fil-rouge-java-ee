@@ -268,7 +268,8 @@ public class Main {
 
 			case 6:
 
-				// passer commande
+				// passer commande //marche pas
+				
 
 				break;
 			case 7:// Retour au menu de connexion

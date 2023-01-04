@@ -156,11 +156,6 @@ public class Achat {
 	
 
 	
-	
-	
-	
-	
-	
 	public void getAchats() {
 	    EntityManager em = utils.JPA.getEntityManager();
 	    TypedQuery<Achat> query = em.createQuery("SELECT a FROM Achat a WHERE a.produit IS NOT NULL", Achat.class);
@@ -176,15 +171,7 @@ public class Achat {
 
 	
 	
-	
-	
-	
-	
-	
-	
-	
 
-	
 	
 	
 	/**

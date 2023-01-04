@@ -13,16 +13,8 @@ public class Main {
 
 		System.out.println("\r\r--- Connexion ---" + "\r1. Compte employé" + "\r2. Compte client" + "\r3. Quitter");
 
-		int selection = 0;
-		while (selection == 0) {
-			try {
-				System.out.print("\rIndiquez votre choix : ");
-				selection = scan.nextInt();
-			} catch (InputMismatchException e) {
-				System.out.println("Veuillez entrer un chiffre.");
-				scan.nextLine();
-			}
-		}
+		int selection = getSelection(1, 3);
+
 
 		switch (selection) {
 		case 1:// CONNEXION EMPLOYE
@@ -36,17 +28,8 @@ public class Main {
 					+ "\r7. Afficher l'historique des livraisons de stock " + "\r8. Retour au menu de connexion"
 					+ "\r9. Quitter (cela effacera le contenu de votre panier)");
 
-			selection = 0;
-			while (selection == 0 || selection < 1 || selection > 9) {
-				try {
-					System.out.print("\rIndiquez votre choix : ");
-					selection = scan.nextInt();
-					scan.nextLine();
-				} catch (InputMismatchException e) {
-					System.out.println("Veuillez entrer un chiffre.");
-					scan.nextLine();
-				}
-			}
+			selection = getSelection(1, 9);
+			
 			switch (selection) {
 
 			case 1:// Afficher les produit disponible // marche
@@ -107,9 +90,7 @@ public class Main {
 
 			case 6:// Ajouter du stock à un produit // marche
 
-				System.out.println("Entrez l'id du produit");
-				int id = scan.nextInt();
-				scan.nextLine();
+				int id = getSelectionMin(1, "Entrez l'id du produit");
 
 				Calendar date = Calendar.getInstance();
 				Produit prodId = new Produit();
@@ -117,18 +98,8 @@ public class Main {
 
 				System.out.println("Entrez le nom du fournisseur du produit");
 				String nomfour = scan.nextLine();
-
-				int nbrprod = 0;
-				while (nbrprod == 0 || nbrprod < 1) {
-					try {
-						System.out.println("Entrez le nombre de produit livré");
-						nbrprod = scan.nextInt();
-						scan.nextLine();
-					} catch (InputMismatchException e) {
-						System.out.println("Veuillez entrer un chiffre.");
-						scan.nextLine();
-					}
-				}
+				
+				int nbrprod = getSelectionMin(1,"Entrez le nombre de produit livré");
 
 				try {
 					Achat achat = new Achat(prodId, nomfour, date, nbrprod);
@@ -163,13 +134,6 @@ public class Main {
 				main(null);
 				break;
 
-			default:// Quitter
-
-				System.out.println("Au revoir !");
-				System.exit(0);
-				main(null);
-				break;
-
 			}
 
 			break;
@@ -184,17 +148,7 @@ public class Main {
 					+ "\r4. Supprimer un produit du panier" + "\r5. Afficher le panier" + "\r6. Passer commande"
 					+ "\r7. Retour au menu de connexion" + "\r8. Quitter (Cela effacera le contenu de votre panier)");
 
-			selection = 0;
-			while (selection == 0 || selection < 1 || selection > 8) {
-				try {
-					System.out.print("\rIndiquez votre choix : ");
-					selection = scan.nextInt();
-					scan.nextLine();
-				} catch (InputMismatchException e) {
-					System.out.println("Veuillez entrer un chiffre.");
-					scan.nextLine();
-				}
-			}
+			selection = getSelection(1, 8);
 
 			switch (selection) {
 
@@ -226,17 +180,7 @@ public class Main {
 
 				System.out.println("\rConfirmer ajout au panier" + "\r1. Oui" + "\r2. Non");
 
-				selection = 0;
-				while (selection == 0 || selection < 1 || selection > 2) {
-					try {
-						System.out.print("\rIndiquez votre choix : ");
-						selection = scan.nextInt();
-						scan.nextLine();
-					} catch (InputMismatchException e) {
-						System.out.println("Veuillez entrer un chiffre.");
-						scan.nextLine();
-					}
-				}
+				selection = getSelection(1, 2);
 
 				if (selection == 1) {
 					Produit cartprod = new Produit();
@@ -255,41 +199,23 @@ public class Main {
 
 			case 4:
 
-				// supprimer un produit du panier
+				// supprimer un produit du panier //marche
 				System.out.println("Supprimer :" + "\r\r1. Par nom" + "\r2. Par Id" + "\r3. Annuler");
 
-				selection = 0;
-				while (selection == 0 || selection < 1 || selection > 3) {
-					try {
-						System.out.print("\rIndiquez votre choix : ");
-						selection = scan.nextInt();
-						scan.nextLine();
-					} catch (InputMismatchException e) {
-						System.out.println("Veuillez entrer un chiffre.");
-						scan.nextLine();
-					}
-				}
+				selection = getSelection(1, 3);
+				
 				Panier supppanier = new Panier();
 				Produit suppprod = new Produit();
 				switch (selection) {
-				case 1:// Supprimer par nom
+				case 1:// Supprimer par nom //marche
 					supppanier.AfficherPanier();
 					System.out.println("\rEntrez le nom de l'article que vous voulez supprimer");
 					String nomsupp = scan.nextLine();
 					suppprod.getProduit(nomsupp);
 					System.out.println("\rSupprimer cet article du panier ?" + "\r1. Oui" + "\r2. Non");
 					
-					selection = 0;
-					while (selection == 0 || selection < 1 || selection > 2) {
-						try {
-							System.out.print("\rIndiquez votre choix : ");
-							selection = scan.nextInt();
-							scan.nextLine();
-						} catch (InputMismatchException e) {
-							System.out.println("Veuillez entrer un chiffre.");
-							scan.nextLine();
-						}
-					}
+					selection = getSelection(1, 2);
+					
 					switch (selection) {
 					case 1:
 						int id = suppprod.getProduitId(nomsupp);
@@ -304,35 +230,14 @@ public class Main {
 					}
 
 					break;
-				case 2:// Supprimer par ID
+				case 2:// Supprimer par ID //marche
 					supppanier.AfficherPanierAvecId();
-					System.out.println("\rEntrez l'Id de l'article que vous voulez supprimer");
-					selection = 0;
-					while (selection == 0 || selection < 1) {
-						try {
-							System.out.print("\rIndiquez votre choix : ");
-							selection = scan.nextInt();
-							scan.nextLine();
-						} catch (InputMismatchException e) {
-							System.out.println("Veuillez entrer un chiffre supérieur à 0");
-							scan.nextLine();
-						}
-					}
+					selection = getSelectionMin(1,"\rEntrez l'Id de l'article que vous voulez supprimer");
 					int idsupp = selection;
 					suppprod.getProduitParId(idsupp);
 					System.out.println("\rSupprimer cet article du panier ?" + "\r1. Oui" + "\r2. Non");
 					
-					selection = 0;
-					while (selection == 0 || selection < 1 || selection > 2) {
-						try {
-							System.out.print("\rIndiquez votre choix : ");
-							selection = scan.nextInt();
-							scan.nextLine();
-						} catch (InputMismatchException e) {
-							System.out.println("Veuillez entrer un chiffre.");
-							scan.nextLine();
-						}
-					}
+					selection = getSelection(1, 2);
 					switch (selection) {
 					case 1:
 						supppanier.supprimerArticle(idsupp);
@@ -351,9 +256,6 @@ public class Main {
 					break;
 
 				}
-
-				// Panier panier = new Panier();
-				// panier.supprimerArticle(1);
 				break;
 
 			case 5:
@@ -390,13 +292,49 @@ public class Main {
 			// quitter
 			System.exit(0);
 			break;
-		default:
-			System.out.println("entrée invalide , entrez un chiffre entre 1 et 3 ");
-			main(null);
-			break;
 		}
 
 		scan.close();
 	}
+	
+	
+	public static int getSelection(int min, int max) {
+		@SuppressWarnings("resource")
+		Scanner scan = new Scanner(System.in);
+
+	    int selection = 0;
+	    while (selection == 0 || selection < min || selection > max) {
+	        try {
+	            System.out.print("\rIndiquez votre choix : ");
+	            selection = scan.nextInt();
+	            scan.nextLine();
+	        } catch (InputMismatchException e) {
+	            System.out.println("Entrée invalide , entrez un chiffre entre "+min+" et "+max);
+	            scan.nextLine();
+	        }
+	    }
+
+	    return selection;
+	}
+	
+	public static int getSelectionMin(int min,String message) {
+		@SuppressWarnings("resource")
+		Scanner scan = new Scanner(System.in);
+
+	    int selection = 0;
+	    while (selection == 0 || selection < min) {
+	        try {
+	            System.out.print(message);
+	            selection = scan.nextInt();
+	            scan.nextLine();
+	        } catch (InputMismatchException e) {
+	            System.out.println("Entrée invalide , entrez un chiffre");
+	            scan.nextLine();
+	        }
+	    }
+
+	    return selection;
+	}
+
 
 }

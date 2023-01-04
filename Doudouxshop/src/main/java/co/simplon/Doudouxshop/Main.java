@@ -173,8 +173,9 @@ public class Main {
 			case 3:
 
 				// ajouter un produit au panier // marche
-				System.out.println("\rQuel produit voulez vous ajouter au panier ?");
 				Produit panierprod = new Produit();
+				panierprod.getProduits();
+				System.out.println("\rQuel produit voulez vous ajouter au panier ?");			
 				String nompanierprod = scan.nextLine();
 				panierprod.getProduit(nompanierprod);
 
@@ -269,7 +270,9 @@ public class Main {
 			case 6:
 
 				// passer commande //marche pas
-				
+				Commande cmd = new Commande();
+				cmd.passerCommande();
+
 
 				break;
 			case 7:// Retour au menu de connexion

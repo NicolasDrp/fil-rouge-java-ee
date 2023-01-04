@@ -68,6 +68,17 @@ INSERT INTO vente (idproduit, dateachat)
 SELECT idproduit, CURRENT_DATE
 FROM panier;
 
+--enlever les produit dans la table produit
+
+UPDATE produit p
+SET quantite = quantite - v.count
+FROM (
+    SELECT idproduit, COUNT(*) as count
+    FROM panier
+    GROUP BY idproduit
+) v
+WHERE v.idproduit = p.idproduit;
+
 --vider le panier
 
 TRUNCATE TABLE panier;

@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 
 @Entity
-@Table(name = "name_like_this")
+@Table(name = "panier")
 public class Panier {
 
 	@Id
@@ -25,10 +25,7 @@ public class Panier {
 	@ManyToOne
 	@JoinColumn(name = "idproduit")
 	private Produit idproduit;
-	
-	
-	
-	
+
 	/**
 	 * @param idproduit
 	 */
@@ -36,108 +33,118 @@ public class Panier {
 		super();
 		this.idproduit = idproduit;
 	}
-	
+
 	public Panier() {
 		super();
 	}
 
-
-
-
-
 	public void ajouterPanier(Produit prod) {
-	    // The EntityManager class allows operations such as create, read, update, delete
-	    EntityManager em = utils.JPA.getEntityManager();
-	    // Used to issue transactions on the EntityManager
-	    EntityTransaction et = null;
+		// The EntityManager class allows operations such as create, read, update,
+		// delete
+		EntityManager em = utils.JPA.getEntityManager();
+		// Used to issue transactions on the EntityManager
+		EntityTransaction et = null;
 
-	    try {
-	        // Get transaction and start
-	        et = em.getTransaction();
-	        et.begin();
+		try {
+			// Get transaction and start
+			et = em.getTransaction();
+			et.begin();
 
-	        // Create a new Panier object and set its idproduit field
-	        Panier panier = new Panier();
-	        panier.setIdproduit(prod);
+			// Create a new Panier object and set its idproduit field
+			Panier panier = new Panier();
+			panier.setIdproduit(prod);
 
-	        // Save the Panier object
-	        em.persist(panier);
-	        et.commit();
-	        
-	        System.out.println("Le produit a bien été ajouté au panier");
-	    } catch (Exception ex) {
-	        // If there is an exception rollback changes
-	        if (et != null) {
-	            et.rollback();
-	        }
-	        ex.printStackTrace();
-	    } finally {
-	        // Close EntityManager
-	        //em.close();
-	    }
+			// Save the Panier object
+			em.persist(panier);
+			et.commit();
+
+			System.out.println("Le produit a bien été ajouté au panier");
+		} catch (Exception ex) {
+			// If there is an exception rollback changes
+			if (et != null) {
+				et.rollback();
+			}
+			ex.printStackTrace();
+		} finally {
+			// Close EntityManager
+			// em.close();
+		}
 	}
 
+	public void supprimerArticle(int idproduit) {
+		EntityManager em = utils.JPA.getEntityManager();
+		EntityTransaction et = null;
 
+		try {
+			et = em.getTransaction();
+			et.begin();
 
-	public void AfficherHistorique() {
-	    EntityManager em = utils.JPA.getEntityManager();
+			// Find the Panier object with the given idproduit
+			TypedQuery<Panier> query = em.createQuery("SELECT p FROM Panier p WHERE p.idproduit.idproduit = :idproduit",
+					Panier.class);
+			query.setParameter("idproduit", idproduit);
+			List<Panier> paniers = query.getResultList();
 
-	    // the lowercase a refers to the Achat object
-	    String strQuery = "SELECT a FROM Panier a WHERE a.idproduit IS NOT NULL";
+			if (!paniers.isEmpty()) {
+				Panier panier = paniers.get(0);
+				em.remove(panier);
+			}
 
-	    // Issue the query and get a list of Achat objects
-	    TypedQuery<Panier> tq = em.createQuery(strQuery, Panier.class);
-	    List<Panier> achats;
-	    try {
-	        // Get the list of Achat objects and output the details of each purchase
-	        achats = tq.getResultList();
-	        achats.forEach(achat -> System.out.println("\rFournisseur: " + achat.getIdproduit()));
-	    } catch (NoResultException ex) {
-	        ex.printStackTrace();
-	    } finally {
-	        //em.close();
-	    }
+			et.commit();
+
+			System.out.println("Le produit a bien été supprimé du panier");
+		} catch (Exception ex) {
+			if (et != null) {
+				et.rollback();
+			}
+			ex.printStackTrace();
+		} finally {
+			em.close();
+		}
 	}
-	
-	
-	
-	public void getProduits() {
+
+	public void AfficherPanier() {
 		EntityManager em = utils.JPA.getEntityManager();
 
-		// the lowercase p refers to the object
-		String strQuery = "SELECT p FROM Panier p where p.id is not null";
+		// the lowercase a refers to the Achat object
+		String strQuery = "SELECT a FROM Panier a WHERE a.idproduit IS NOT NULL";
 
-		// Issue the query and get a matching Produit
+		// Issue the query and get a list of Achat objects
 		TypedQuery<Panier> tq = em.createQuery(strQuery, Panier.class);
-		List<Panier> produit;
+		List<Panier> achats;
 		try {
-			// Get matching Produit object and output
-			produit = tq.getResultList();
-			produit.forEach(prod -> System.out.println(
-					"\rNom: " + prod.getIdproduit()));
+			// Get the list of Achat objects and output the details of each purchase
+			achats = tq.getResultList();
+			achats.forEach(achat -> System.out.println("\rNom du produit: " + achat.getIdproduit().getNom()
+					+ "\rPrix du produit: " + achat.getIdproduit().getPrix() + "€" + "\rProduit disponible: "
+					+ achat.getIdproduit().getQuantite()));
 		} catch (NoResultException ex) {
 			ex.printStackTrace();
 		} finally {
-			//em.close();
+			// em.close();
 		}
 	}
-	
 
-	public void printCartContents() {
-	    EntityManager em = utils.JPA.getEntityManager();
+	public void AfficherPanierAvecId() {
+		EntityManager em = utils.JPA.getEntityManager();
 
-	    // Create a TypedQuery to execute the query
-	    String query = "SELECT p FROM Panier p WHERE p.idproduit IS NOT NULL";
-	    TypedQuery<Panier> tq = em.createQuery(query, Panier.class);
+		// the lowercase a refers to the Achat object
+		String strQuery = "SELECT a FROM Panier a WHERE a.idproduit IS NOT NULL";
 
-	    // Execute the query and get the result list
-	    List<Panier> cartContents = tq.getResultList();
-
-	    // Iterate through the list of Panier objects and print their details
-	    for (Panier item : cartContents) {
-	        System.out.println("ID: " + item.getId());
-	        System.out.println("Produit ID: " + item.getIdproduit().getId());
-	    }
+		// Issue the query and get a list of Achat objects
+		TypedQuery<Panier> tq = em.createQuery(strQuery, Panier.class);
+		List<Panier> achats;
+		try {
+			// Get the list of Achat objects and output the details of each purchase
+			achats = tq.getResultList();
+			achats.forEach(achat -> System.out.println("\rNom du produit: " + achat.getIdproduit().getNom()
+					+ "\rPrix du produit: " + achat.getIdproduit().getPrix() + "€" + "\rProduit disponible: "
+					+ achat.getIdproduit().getQuantite()+"\rId du produit: "+achat.getIdproduit().getId()));
+		} catch (NoResultException ex) {
+			ex.printStackTrace();
+		} finally {
+			// em.close();
+		}
 	}
 
 	
@@ -145,11 +152,6 @@ public class Panier {
 	
 	
 	
-	
-	
-	
-	
-
 	/**
 	 * @return the id
 	 */

@@ -115,6 +115,36 @@ public class Produit {
 	    }
 	}
 	
+	public void getProduitParId(int idproduit) {
+	    EntityManager em = utils.JPA.getEntityManager();
+
+	    // the lowercase c refers to the object
+	    String query = "SELECT p FROM Produit p WHERE p.idproduit = :idproduit";
+
+	    // Issue the query and get a matching Customer
+	    TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+	    tq.setParameter("idproduit", idproduit);
+
+	    List<Produit> produit = null;
+	    try {
+	        // Get matching customer object and output
+	        produit = tq.getResultList();
+	    } catch (NoResultException ex) {
+	        ex.printStackTrace();
+	        System.out.println("Le produit n'existe pas ou une erreur est survenu");
+	    } finally {
+	        //em.close();
+	    }
+	    
+	    //si aucun produit n'est trouvé
+	    if (produit == null || produit.isEmpty()) {
+	        System.out.println("Aucun produit trouvé");
+	    //sinon afficher le produit
+	    } else {
+	        produit.forEach(produitS -> System.out.println("\rNom: " + produitS.getNom() + "\rPrix: "
+	                + produitS.getPrix() +"€" + "\rDisponible: " + produitS.getQuantite()+"\rId du produit: "+produitS.getId()));
+	    }
+	}
 	
 	public int getProduitId(String nom) {
 	    EntityManager em = utils.JPA.getEntityManager();

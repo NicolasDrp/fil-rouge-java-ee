@@ -30,11 +30,11 @@ public class Main {
 			 * achat // produit //
 			 */
 
-			System.out.println(
-					"Que voulez vous faire?" + "\r1. Afficher les produit disponible" + "\r2. Rechercher un produit"
-							+ "\r3. Ajouter un produit" + "\r4. Modifier un produit" + "\r5. Supprimer un produit"
-							+ "\r6. Ajouter du stock" + "\r7. Afficher l'historique des livraisons de stock "
-							+ "\r8. Retour au menu de connexion" + "\r9. Quitter");
+			System.out.println("Que voulez vous faire?" + "\r1. Afficher les produit disponible"
+					+ "\r2. Rechercher un produit" + "\r3. Ajouter un produit" + "\r4. Modifier un produit"
+					+ "\r5. Supprimer un produit" + "\r6. Ajouter du stock"
+					+ "\r7. Afficher l'historique des livraisons de stock " + "\r8. Retour au menu de connexion"
+					+ "\r9. Quitter (cela effacera le contenu de votre panier)");
 
 			selection = 0;
 			while (selection == 0 || selection < 1 || selection > 9) {
@@ -57,7 +57,7 @@ public class Main {
 				break;
 
 			case 2:// chercher un produit en particulier // marche
-				
+
 				System.out.println("\rQuel produit rechercher vous ?");
 				Produit prod = new Produit();
 				String nomprod = scan.nextLine();
@@ -145,7 +145,8 @@ public class Main {
 
 			case 7:// Afficher l'historique des achat // afficher le nom des produit aussi
 				Achat achat = new Achat();
-				achat.AfficherHistorique();;
+				achat.AfficherHistorique();
+				;
 
 				main(null);
 				break;
@@ -163,7 +164,7 @@ public class Main {
 				break;
 
 			default:// Quitter
-				
+
 				System.out.println("Au revoir !");
 				System.exit(0);
 				main(null);
@@ -179,9 +180,9 @@ public class Main {
 			 */
 
 			System.out.println("Que voulez vous faire?" + "\r1. Afficher les produit disponible"
-					+ "\r2. Rechercher un produit" + "\r3. Ajouter un produit au panier" + "\r4. Supprimer un produit"
-					+ "\r5. Afficher le panier" + "\r6. Passer commande" + "\r7. Retour au menu de connexion"
-					+ "\r8. Quitter");
+					+ "\r2. Rechercher un produit" + "\r3. Ajouter un produit au panier"
+					+ "\r4. Supprimer un produit du panier" + "\r5. Afficher le panier" + "\r6. Passer commande"
+					+ "\r7. Retour au menu de connexion" + "\r8. Quitter (Cela effacera le contenu de votre panier)");
 
 			selection = 0;
 			while (selection == 0 || selection < 1 || selection > 8) {
@@ -216,17 +217,15 @@ public class Main {
 				break;
 
 			case 3:
-				
-				// ajouter un produit au panier // marche pas encore
+
+				// ajouter un produit au panier // marche
 				System.out.println("\rQuel produit voulez vous ajouter au panier ?");
 				Produit panierprod = new Produit();
 				String nompanierprod = scan.nextLine();
 				panierprod.getProduit(nompanierprod);
-				
-				System.out.println("\rConfirmer ajout au panier"
-						+ "\r1. Oui"
-						+ "\r2. Non");
-				
+
+				System.out.println("\rConfirmer ajout au panier" + "\r1. Oui" + "\r2. Non");
+
 				selection = 0;
 				while (selection == 0 || selection < 1 || selection > 2) {
 					try {
@@ -238,40 +237,137 @@ public class Main {
 						scan.nextLine();
 					}
 				}
-				
-				if (selection==1) {
+
+				if (selection == 1) {
 					Produit cartprod = new Produit();
 					cartprod.getProduit(nompanierprod);
 
 					Panier cart = new Panier();
-					//récuperer l'id du produit
+					// récuperer l'id du produit
 					cartprod.setId(cartprod.getProduitId(nompanierprod));
 					// Ajouter le produit au panier
 					cart.ajouterPanier(cartprod);
 				}
-					System.out.println("Retour au menu");
-					main(null);
-				
+				System.out.println("Retour au menu");
+				main(null);
+
 				break;
 
 			case 4:
 
 				// supprimer un produit du panier
-				
+				System.out.println("Supprimer :" + "\r\r1. Par nom" + "\r2. Par Id" + "\r3. Annuler");
+
+				selection = 0;
+				while (selection == 0 || selection < 1 || selection > 3) {
+					try {
+						System.out.print("\rIndiquez votre choix : ");
+						selection = scan.nextInt();
+						scan.nextLine();
+					} catch (InputMismatchException e) {
+						System.out.println("Veuillez entrer un chiffre.");
+						scan.nextLine();
+					}
+				}
+				Panier supppanier = new Panier();
+				Produit suppprod = new Produit();
+				switch (selection) {
+				case 1:// Supprimer par nom
+					supppanier.AfficherPanier();
+					System.out.println("\rEntrez le nom de l'article que vous voulez supprimer");
+					String nomsupp = scan.nextLine();
+					suppprod.getProduit(nomsupp);
+					System.out.println("\rSupprimer cet article du panier ?" + "\r1. Oui" + "\r2. Non");
+					
+					selection = 0;
+					while (selection == 0 || selection < 1 || selection > 2) {
+						try {
+							System.out.print("\rIndiquez votre choix : ");
+							selection = scan.nextInt();
+							scan.nextLine();
+						} catch (InputMismatchException e) {
+							System.out.println("Veuillez entrer un chiffre.");
+							scan.nextLine();
+						}
+					}
+					switch (selection) {
+					case 1:
+						int id = suppprod.getProduitId(nomsupp);
+						supppanier.supprimerArticle(id);
+						main(null);
+						break;
+
+					case 2://Retour menu
+						System.out.println("OK! Retour au menu");
+						main(null);
+						break;
+					}
+
+					break;
+				case 2:// Supprimer par ID
+					supppanier.AfficherPanierAvecId();
+					System.out.println("\rEntrez l'Id de l'article que vous voulez supprimer");
+					selection = 0;
+					while (selection == 0 || selection < 1) {
+						try {
+							System.out.print("\rIndiquez votre choix : ");
+							selection = scan.nextInt();
+							scan.nextLine();
+						} catch (InputMismatchException e) {
+							System.out.println("Veuillez entrer un chiffre supérieur à 0");
+							scan.nextLine();
+						}
+					}
+					int idsupp = selection;
+					suppprod.getProduitParId(idsupp);
+					System.out.println("\rSupprimer cet article du panier ?" + "\r1. Oui" + "\r2. Non");
+					
+					selection = 0;
+					while (selection == 0 || selection < 1 || selection > 2) {
+						try {
+							System.out.print("\rIndiquez votre choix : ");
+							selection = scan.nextInt();
+							scan.nextLine();
+						} catch (InputMismatchException e) {
+							System.out.println("Veuillez entrer un chiffre.");
+							scan.nextLine();
+						}
+					}
+					switch (selection) {
+					case 1:
+						supppanier.supprimerArticle(idsupp);
+						main(null);
+						break;
+
+					case 2://Retour menu
+						System.out.println("OK! Retour au menu");
+						main(null);
+						break;
+					}
+					break;
+				case 3:// Annuler
+					System.out.println("OK! Retour au menu");
+					main(null);
+					break;
+
+				}
+
+				// Panier panier = new Panier();
+				// panier.supprimerArticle(1);
 				break;
 
 			case 5:
 
 				// afficher le panier
-				Panier panier = new Panier();
-				panier.printCartContents();
-				
+				Panier afficherpanier = new Panier();
+				afficherpanier.AfficherPanier();
+
 				break;
 
 			case 6:
 
 				// passer commande
-				
+
 				break;
 			case 7:// Retour au menu de connexion
 

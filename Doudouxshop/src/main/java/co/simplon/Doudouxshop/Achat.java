@@ -129,30 +129,33 @@ public class Achat {
 	
 	
 	// afficher l'historique des achats
-	public void AfficherHistorique() {
-	    EntityManager em = utils.JPA.getEntityManager();
+	public void afficherHistorique() {
+		EntityManager em = utils.JPA.getEntityManager();
+    // the lowercase a refers to the Achat object, p refers to the Produit object
+    String strQuery = "SELECT a, p FROM Achat a INNER JOIN Produit p ON a.idproduit = p.idproduit ORDER BY a.date DESC";
 
-	    // the lowercase a refers to the Achat object
-	    String strQuery = "SELECT a FROM Achat a WHERE a.produit IS NOT NULL ORDER BY a.date DESC";
+    // Issue the query and get a list of Achat objects
+    TypedQuery<Object[]> tq = em.createQuery(strQuery, Object[].class);
+    List<Object[]> achats;
+    try {
+        // Get the list of Achat objects and output the details of each purchase
+        achats = tq.getResultList();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        achats.forEach(achat -> {
+        	Achat a = (Achat) achat[0];
+        	Produit p = (Produit) achat[1];
+        	System.out.println("\rNom produit: " + p.getNom() 
+        			+ "\rFournisseur: " + a.getFournisseur() 
+        			+ "\rNbrAchat: " + a.getNbrAchat()
+        			+"\rDate: " + dateFormat.format(a.getDate().getTime()));
+        });
+    } catch (NoResultException ex) {
+        ex.printStackTrace();
+    } finally {
+        //em.close();
+    }
+}
 
-	    // Issue the query and get a list of Achat objects
-	    TypedQuery<Achat> tq = em.createQuery(strQuery, Achat.class);
-	    List<Achat> achats;
-	    try {
-	        // Get the list of Achat objects and output the details of each purchase
-	        achats = tq.getResultList();
-	        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	        achats.forEach(achat -> System.out.println("\rFournisseur: " + achat.getFournisseur() 
-	        + "\rNbrAchat: " + achat.getNbrAchat()
-	        +"\rDate: " + dateFormat.format(achat.getDate().getTime())));
-	    } catch (NoResultException ex) {
-	        ex.printStackTrace();
-	    } finally {
-	        //em.close();
-	    }
-	}
-
-	
 	
 
 	

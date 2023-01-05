@@ -99,25 +99,29 @@ public class Panier {
 			}
 			ex.printStackTrace();
 		} finally {
-			em.close();
+			Main.main(null);
+			// em.close();
 		}
 	}
 
 	public void AfficherPanier() {
 		EntityManager em = utils.JPA.getEntityManager();
-
 		// the lowercase a refers to the Achat object
 		String strQuery = "SELECT a FROM Panier a WHERE a.idproduit IS NOT NULL";
 
 		// Issue the query and get a list of Achat objects
 		TypedQuery<Panier> tq = em.createQuery(strQuery, Panier.class);
-		List<Panier> achats;
+		List<Panier> paniers;
 		try {
 			// Get the list of Achat objects and output the details of each purchase
-			achats = tq.getResultList();
-			achats.forEach(achat -> System.out.println("\rNom du produit: " + achat.getIdproduit().getNom()
-					+ "\rPrix du produit: " + achat.getIdproduit().getPrix() + "€" + "\rProduit disponible: "
-					+ achat.getIdproduit().getQuantite()));
+			paniers = tq.getResultList();
+			if (paniers.isEmpty()) {
+				System.out.println("Le panier est vide");
+			} else {
+				paniers.forEach(panier -> System.out.println("\rNom du produit: " + panier.getIdproduit().getNom()
+						+ "\rPrix du produit: " + panier.getIdproduit().getPrix() + "€" + "\rProduit disponible: "
+						+ panier.getIdproduit().getQuantite()));
+			}
 		} catch (NoResultException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -139,7 +143,7 @@ public class Panier {
 			achats = tq.getResultList();
 			achats.forEach(achat -> System.out.println("\rNom du produit: " + achat.getIdproduit().getNom()
 					+ "\rPrix du produit: " + achat.getIdproduit().getPrix() + "€" + "\rProduit disponible: "
-					+ achat.getIdproduit().getQuantite()+"\rId du produit: "+achat.getIdproduit().getId()));
+					+ achat.getIdproduit().getQuantite() + "\rId du produit: " + achat.getIdproduit().getId()));
 		} catch (NoResultException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -148,30 +152,55 @@ public class Panier {
 	}
 
 	public void viderPanier() {
-	    EntityManager em = utils.JPA.getEntityManager();
-	    EntityTransaction et = null;
+		EntityManager em = utils.JPA.getEntityManager();
+		EntityTransaction et = null;
 
-	    try {
-	        et = em.getTransaction();
-	        et.begin();
+		try {
+			et = em.getTransaction();
+			et.begin();
 
-	        // Truncate la table panier
-	        em.createNativeQuery("TRUNCATE TABLE panier").executeUpdate();
+			// Truncate la table panier
+			em.createNativeQuery("TRUNCATE TABLE panier").executeUpdate();
 
-	        et.commit();
-	    } catch (Exception ex) {
-	        if (et != null) {
-	            et.rollback();
-	        }
-	        ex.printStackTrace();
-	    } finally {
-	        em.close();
-	    }
+			et.commit();
+		} catch (Exception ex) {
+			if (et != null) {
+				et.rollback();
+			}
+			ex.printStackTrace();
+		} finally {
+			//em.close();
+		}
+	}
+
+	public void getPanier(String nom) {
+		EntityManager em = utils.JPA.getEntityManager();
+
+		String query = "SELECT p FROM Produit p INNER JOIN Panier pan ON p.id = pan.idproduit WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nom))";
+		TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+		tq.setParameter("nom", nom);
+
+		List<Produit> produits = null;
+		try {
+			produits = tq.getResultList();
+		} catch (NoResultException ex) {
+			ex.printStackTrace();
+			System.out.println("Le produit n'existe pas ou une erreur est survenue");
+		} finally {
+			// em.close();
+		}
+
+		if (produits == null || produits.isEmpty()) {
+			System.out.println("Aucun produit trouvé dans le panier");
+			Main.main(null);
+		} else {
+			produits.forEach(produit -> System.out.println("\rNom: " + produit.getNom() + "\rPrix: " + produit.getPrix()
+					+ "€" + "\rDisponible: " + produit.getQuantite()));
+		}
 	}
 
 	
-	
-	
+
 	
 	/**
 	 * @return the id

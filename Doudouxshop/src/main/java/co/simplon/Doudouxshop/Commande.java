@@ -32,7 +32,7 @@ public class Commande {
 			}
 			ex.printStackTrace();
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 }

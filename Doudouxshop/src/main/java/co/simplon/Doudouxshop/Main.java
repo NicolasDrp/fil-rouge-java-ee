@@ -51,7 +51,7 @@ public class Main {
 				System.out.println("Nom du produit: ");
 				String nom = scan.nextLine();
 
-				double prix= 0;
+				double prix = 0;
 				while (prix == 0) {
 					try {
 						System.out.print("\rLe prix: ");
@@ -62,7 +62,6 @@ public class Main {
 						scan.nextLine();
 					}
 				}
-
 
 				int quantite = 0;
 				while (quantite == 0) {
@@ -95,7 +94,7 @@ public class Main {
 				main(null);
 				break;
 
-			case 5:// Supprimer un produit // marche pluuuus
+			case 5:// Supprimer un produit // marche
 
 				System.out.println("Quel produit souhaitez vous supprimer ?");
 				String nomsup = scan.nextLine();
@@ -107,11 +106,31 @@ public class Main {
 
 			case 6:// Ajouter du stock à un produit // marche
 
-				int id = getSelectionMin(1, "Entrez l'id du produit");
+				System.out.println("Ajouter du stock :" + "\r\r1. Par nom" + "\r2. Par Id" + "\r3. Annuler");
+
+				selection = getSelection(1, 3);
+
+				Produit prodId = new Produit();
+				int idproduit = 0;
+				switch (selection) {
+				case 1:
+					System.out.println("Entrez le nom du produit: ");
+					String nomproduit = scan.nextLine();
+					idproduit = prodId.getProduitId(nomproduit);
+					break;
+
+				case 2:
+					idproduit = getSelectionMin(1, "Entrez l'id du produit");
+					break;
+				case 3:
+
+					System.out.println("OK! Retour au menu");
+					main(null);
+					break;
+				}
 
 				Calendar date = Calendar.getInstance();
-				Produit prodId = new Produit();
-				prodId.setId(id);
+				prodId.setId(idproduit);
 
 				System.out.println("Entrez le nom du fournisseur du produit");
 				String nomfour = scan.nextLine();
@@ -121,9 +140,10 @@ public class Main {
 				try {
 					Achat achat = new Achat(prodId, nomfour, date, nbrprod);
 
-					achat.ajouterStock(id, nomfour, nbrprod);
+					achat.ajouterStock(idproduit, nomfour, nbrprod);
 
 					achat.ajoutProduit();
+					System.out.println("Le stock a été ajouté");
 				} catch (NullPointerException e) {
 					System.out.println("Vous essayer d'ajouter du stock à un produit qui n'existe pas ou plus \n"
 							+ "RETOUR AU MENU");
@@ -131,11 +151,10 @@ public class Main {
 				main(null);
 				break;
 
-			case 7:// Afficher l'historique des achat // afficher le nom des produit aussi
+			case 7:// Afficher l'historique des achat // marche
 				Achat achat = new Achat();
-				achat.AfficherHistorique();
-				;
-
+				achat.afficherHistorique();
+				
 				main(null);
 				break;
 
@@ -175,7 +194,7 @@ public class Main {
 				// afficher la liste de tout les produit // marche
 				Produit list = new Produit();
 				list.getProduits();
-
+				main(null);
 				break;
 
 			case 2:
@@ -226,11 +245,11 @@ public class Main {
 				Panier supppanier = new Panier();
 				Produit suppprod = new Produit();
 				switch (selection) {
-				case 1:// Supprimer par nom //marche
+				case 1:// Supprimer par nom //marche plus
 					supppanier.AfficherPanier();
 					System.out.println("\rEntrez le nom de l'article que vous voulez supprimer");
 					String nomsupp = scan.nextLine();
-					suppprod.getProduit(nomsupp);
+					supppanier.getPanier(nomsupp);
 					System.out.println("\rSupprimer cet article du panier ?" + "\r1. Oui" + "\r2. Non");
 
 					selection = getSelection(1, 2);
@@ -279,9 +298,10 @@ public class Main {
 
 			case 5:
 
-				// afficher le panier
+				// afficher le panier // à corriger
 				Panier afficherpanier = new Panier();
 				afficherpanier.AfficherPanier();
+				main(null);
 
 				break;
 			case 6:
@@ -304,8 +324,11 @@ public class Main {
 			case 7:
 
 				// passer commande //marche
+				Panier cmdpanier = new Panier();
+				cmdpanier.AfficherPanier();
 				Commande cmd = new Commande();
 				cmd.passerCommande();
+				main(null);
 
 				break;
 			case 8:// Retour au menu de connexion

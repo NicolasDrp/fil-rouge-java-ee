@@ -229,31 +229,55 @@ public class Produit {
 		}
 	}
 
+	/**
+	 * @param nom
+	 * 
+	 */
 	public void supprimerProduit(String nom) {
-		EntityManager em = utils.JPA.getEntityManager();
-		EntityTransaction et = null;
-		String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nomproduit))";
-		TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
-		Produit produit = null;
-		tq.setParameter("nomproduit", nom);
+	    EntityManager em = utils.JPA.getEntityManager();
+	    EntityTransaction et = null;
+	    String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nomproduit))";
+	    TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+	    Produit produit = null;
+	    tq.setParameter("nomproduit", nom);
 
-		try {
-			produit = tq.getSingleResult();
-			et = em.getTransaction();
-			et.begin();
-			produit = em.find(Produit.class, produit.getId());
-			em.remove(produit);
-			et.commit();
-			System.out.println("Le produit a bien été supprimé");
-		} catch (NoResultException e) {
-			System.out.println("Ce produit n'existe pas ou ne peut pas etre trouvé");
-		} catch (Exception ex) {
-			if (et != null) {
-				et.rollback();
-			}
-			ex.printStackTrace();
-		}
+	    try {
+	        produit = tq.getSingleResult();
+	        et = em.getTransaction();
+	        et.begin();
+
+	        // Delete rows from the achat table that reference the produit row
+	        em.createNativeQuery("DELETE FROM achat WHERE idproduit = :idproduit")
+	            .setParameter("idproduit", produit.getId())
+	            .executeUpdate();
+
+	        // Delete rows from the vente table that reference the produit row
+	        em.createNativeQuery("DELETE FROM vente WHERE idproduit = :idproduit")
+	            .setParameter("idproduit", produit.getId())
+	            .executeUpdate();
+
+	        // Delete rows from the panier table that reference the produit row
+	        em.createNativeQuery("DELETE FROM panier WHERE idproduit = :idproduit")
+	            .setParameter("idproduit", produit.getId())
+	            .executeUpdate();
+
+	        // Delete the produit row
+	        produit = em.find(Produit.class, produit.getId());
+	        em.remove(produit);
+
+	        et.commit();
+	        System.out.println("Le produit a bien été supprimé");
+	    } catch (NoResultException e) {
+	        System.out.println("Ce produit n'existe pas ou ne peut pas etre trouvé");
+	    } catch (Exception ex) {
+	        if (et != null) {
+	            et.rollback();
+	        }
+	        ex.printStackTrace();
+	    }
 	}
+
+
 
 	/**
 	 * @return the id

@@ -24,7 +24,7 @@ public class Main {
 					+ "\r2. Rechercher un produit" + "\r3. Ajouter un produit" + "\r4. Modifier un produit"
 					+ "\r5. Supprimer un produit" + "\r6. Ajouter du stock"
 					+ "\r7. Afficher l'historique des livraisons de stock " + "\r8. Retour au menu de connexion"
-					+ "\r9. Quitter (cela effacera le contenu de votre panier)");
+					+ "\r9. Quitter");
 
 			selection = getSelection(1, 9);
 
@@ -183,7 +183,7 @@ public class Main {
 					+ "\r2. Rechercher un produit" + "\r3. Ajouter un produit au panier"
 					+ "\r4. Supprimer un produit du panier" + "\r5. Afficher le panier"
 					+ "\r6. Supprimer le contenu du panier" + "\r7. Passer commande"
-					+ "\r8. Retour au menu de connexion" + "\r9. Quitter (Cela effacera le contenu de votre panier)");
+					+ "\r8. Retour au menu de connexion" + "\r9. Quitter");
 
 			selection = getSelection(1, 9);
 

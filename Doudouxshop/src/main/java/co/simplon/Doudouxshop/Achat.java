@@ -151,23 +151,6 @@ public class Achat {
 	        //em.close();
 	    }
 	}
-	
-	
-	
-
-	
-	public void getAchats() {
-	    EntityManager em = utils.JPA.getEntityManager();
-	    TypedQuery<Achat> query = em.createQuery("SELECT a FROM Achat a WHERE a.produit IS NOT NULL", Achat.class);
-	    List<Achat> results = query.getResultList();
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	    for (Achat achat : results) {
-	        System.out.println("Fournisseur: " + achat.getFournisseur());
-	        System.out.println("Date: " + dateFormat.format(achat.getDate().getTime()));
-	        System.out.println("NbrAchat: " + achat.getNbrAchat());
-	    }
-	    //em.close();
-	}
 
 	
 	

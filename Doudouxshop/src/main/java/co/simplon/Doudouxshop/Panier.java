@@ -147,7 +147,28 @@ public class Panier {
 		}
 	}
 
-	
+	public void viderPanier() {
+	    EntityManager em = utils.JPA.getEntityManager();
+	    EntityTransaction et = null;
+
+	    try {
+	        et = em.getTransaction();
+	        et.begin();
+
+	        // Truncate la table panier
+	        em.createNativeQuery("TRUNCATE TABLE panier").executeUpdate();
+
+	        et.commit();
+	    } catch (Exception ex) {
+	        if (et != null) {
+	            et.rollback();
+	        }
+	        ex.printStackTrace();
+	    } finally {
+	        em.close();
+	    }
+	}
+
 	
 	
 	

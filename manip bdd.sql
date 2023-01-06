@@ -45,7 +45,8 @@ order by date;
 --creer la table panier
 
 create table panier (
-idproduit int references produit(idproduit));
+idproduit int references produit(idproduit),
+idpanier serial);
 
 --insert:
 

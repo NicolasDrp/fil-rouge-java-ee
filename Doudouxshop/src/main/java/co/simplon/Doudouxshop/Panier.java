@@ -20,7 +20,7 @@ public class Panier {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long idpanier;
 
 	@ManyToOne
 	@JoinColumn(name = "idproduit")
@@ -206,14 +206,14 @@ public class Panier {
 	 * @return the id
 	 */
 	public Long getId() {
-		return id;
+		return idpanier;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(Long id) {
-		this.id = id;
+		this.idpanier = id;
 	}
 
 	/**

@@ -214,7 +214,7 @@ public class Main {
 				panierprod.getProduits();
 				System.out.println("\rQuel produit voulez vous ajouter au panier ?");
 				String nompanierprod = scan.nextLine();
-				panierprod.getProduit(nompanierprod);
+				panierprod.getProduitNull(nompanierprod);
 
 				System.out.println("\rConfirmer ajout au panier" + "\r1. Oui" + "\r2. Non");
 

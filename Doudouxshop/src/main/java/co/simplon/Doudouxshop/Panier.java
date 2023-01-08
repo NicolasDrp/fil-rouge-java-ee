@@ -38,38 +38,41 @@ public class Panier {
 		super();
 	}
 
+	
 	public void ajouterPanier(Produit prod) {
-		// The EntityManager class allows operations such as create, read, update,
-		// delete
-		EntityManager em = utils.JPA.getEntityManager();
-		// Used to issue transactions on the EntityManager
-		EntityTransaction et = null;
+	    EntityManager em = utils.JPA.getEntityManager();
+	    EntityTransaction et = null;
 
-		try {
-			// Get transaction and start
-			et = em.getTransaction();
-			et.begin();
+	    try {
+	        et = em.getTransaction();
+	        et.begin();
 
-			// Create a new Panier object and set its idproduit field
-			Panier panier = new Panier();
-			panier.setIdproduit(prod);
+	        // Récupérer l'objet Produit à partir de la base de données
+	        Produit produit = em.find(Produit.class, prod.getId());
 
-			// Save the Panier object
-			em.persist(panier);
-			et.commit();
+	        // Créer un nouvel objet Panier et définir son idproduit
+	        Panier panier = new Panier();
+	        panier.setIdproduit(produit);
 
-			System.out.println("Le produit a bien été ajouté au panier");
-		} catch (Exception ex) {
-			// If there is an exception rollback changes
-			if (et != null) {
-				et.rollback();
-			}
-			ex.printStackTrace();
-		} finally {
-			// Close EntityManager
-			// em.close();
-		}
+	        // Enregistrer l'objet Panier
+	        em.persist(panier);
+	        et.commit();
+
+	        System.out.println("Le produit a bien été ajouté au panier");
+	    } catch (Exception ex) {
+	        if (et != null) {
+	            et.rollback();
+	        }
+	        ex.printStackTrace();
+	    } finally {
+	        // Fermer l'EntityManager
+	        // em.close();
+	    }
 	}
+
+
+
+	
 
 	public void supprimerArticle(int idproduit) {
 		EntityManager em = utils.JPA.getEntityManager();
@@ -129,6 +132,9 @@ public class Panier {
 		}
 	}
 
+	
+	
+	
 	public void AfficherPanierAvecId() {
 		EntityManager em = utils.JPA.getEntityManager();
 

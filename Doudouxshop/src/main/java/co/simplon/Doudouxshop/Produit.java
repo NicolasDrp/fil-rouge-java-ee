@@ -262,6 +262,63 @@ public class Produit {
 		}
 	}
 
+	public void changerPrix(String nom, double nvprix) {
+
+	    EntityManager em = utils.JPA.getEntityManager();
+	    EntityTransaction et = null;
+	    String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nom))";
+	    TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+	    Produit produit = null;
+	    tq.setParameter("nom", nom);
+
+	    try {
+	        produit = tq.getSingleResult();
+	        et = em.getTransaction();
+	        et.begin();
+	        produit = em.find(Produit.class, produit.getId());
+	        produit.setPrix(nvprix);
+	        em.persist(produit);
+	        et.commit();
+	        System.out.println("Le prix du produit a bien été changé");
+	    } catch (NoResultException e) {
+	        System.out.println("le produit n'a pas pu être trouvé");
+	    } catch (Exception ex) {
+	        if (et != null) {
+	            et.rollback();
+	        }
+	        ex.printStackTrace();
+	    }
+	}
+
+	
+	public void changerQuantite(String nom, int nvquantite) {
+	    EntityManager em = utils.JPA.getEntityManager();
+	    EntityTransaction et = null;
+	    String query = "SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) = LOWER(TRIM(:nom))";
+	    TypedQuery<Produit> tq = em.createQuery(query, Produit.class);
+	    Produit produit = null;
+	    tq.setParameter("nom", nom);
+
+	    try {
+	        produit = tq.getSingleResult();
+	        et = em.getTransaction();
+	        et.begin();
+	        produit = em.find(Produit.class, produit.getId());
+	        produit.setQuantite(nvquantite);
+	        em.persist(produit);
+	        et.commit();
+	        System.out.println("La quantité du produit a bien été changée");
+	    } catch (NoResultException e) {
+	        System.out.println("le produit n'a pas pu etre trouver");
+	    } catch (Exception ex) {
+	        if (et != null) {
+	            et.rollback();
+	        }
+	        ex.printStackTrace();
+	    }
+	}
+
+	
 	/**
 	 * @param nom
 	 * 

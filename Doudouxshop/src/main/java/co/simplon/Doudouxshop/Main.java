@@ -20,11 +20,11 @@ public class Main {
 			 * achat // produit //
 			 */
 
-			System.out.println("Que voulez vous faire?" + "\r1. Afficher les produit disponible"
-					+ "\r2. Rechercher un produit" + "\r3. Ajouter un produit" + "\r4. Modifier un produit"
-					+ "\r5. Supprimer un produit" + "\r6. Ajouter du stock"
-					+ "\r7. Afficher l'historique des livraisons de stock " + "\r8. Retour au menu de connexion"
-					+ "\r9. Quitter");
+			System.out.println(
+					"Que voulez vous faire?" + "\r1. Afficher les produit disponible" + "\r2. Rechercher un produit"
+							+ "\r3. Ajouter un produit" + "\r4. Modifier un produit" + "\r5. Supprimer un produit"
+							+ "\r6. Ajouter du stock" + "\r7. Afficher l'historique des livraisons de stock "
+							+ "\r8. Retour au menu de connexion" + "\r9. Quitter");
 
 			selection = getSelection(1, 9);
 
@@ -85,12 +85,51 @@ public class Main {
 				System.out.println("Nom du produit: ");
 				String nommodif = scan.nextLine();
 
+				// afficher produit
+				// choix modif
+				// modif
 				Produit modif = new Produit();
+				modif.getProduitNull(nommodif);
 
-				System.out.println("Nouveau nom du produit: ");
-				String nvnom = scan.nextLine();
+				System.out.println("\rQue voulez vous modifier ?" + "\r1. Le nom du produit" + "\r2. Le prix du produit"
+						+ "\r3. La quantité disponible"+"\r4.Retourner au menu");
 
-				modif.changerNom(nommodif, nvnom);
+				selection = getSelection(1, 4);
+
+				switch (selection) {
+				case 1:
+					System.out.println("Nouveau nom du produit: ");
+					String nvnom = scan.nextLine();
+
+					modif.changerNom(nommodif, nvnom);
+					break;
+
+				case 2:
+
+					double nvprix = 0;
+					while (nvprix == 0) {
+						try {
+							System.out.print("Nouveau prix du produit:");
+							nvprix = scan.nextDouble();
+							scan.nextLine();
+						} catch (InputMismatchException e) {
+							System.out.println("Entrée invalide , entrez un nombre ex(1,99)");
+							scan.nextLine();
+						}
+					}
+					modif.changerPrix(nommodif, nvprix);
+					break;
+				case 3:
+
+					int quant = getSelectionMin(0, "Nouvelle quantité du produit:");
+					modif.changerQuantite(nommodif, quant);
+					
+					break;
+				case 4:
+					main(null);
+					break;
+				}
+
 				main(null);
 				break;
 
@@ -154,7 +193,7 @@ public class Main {
 			case 7:// Afficher l'historique des achat // marche
 				Achat achat = new Achat();
 				achat.afficherHistorique();
-				
+
 				main(null);
 				break;
 
@@ -179,11 +218,11 @@ public class Main {
 			 * vente // produit // panier
 			 */
 
-			System.out.println("Que voulez vous faire?" + "\r1. Afficher les produit disponible"
-					+ "\r2. Rechercher un produit" + "\r3. Ajouter un produit au panier"
-					+ "\r4. Supprimer un produit du panier" + "\r5. Afficher le panier"
-					+ "\r6. Supprimer le contenu du panier" + "\r7. Passer commande"
-					+ "\r8. Retour au menu de connexion" + "\r9. Quitter");
+			System.out.println(
+					"Que voulez vous faire?" + "\r1. Afficher les produit disponible" + "\r2. Rechercher un produit"
+							+ "\r3. Ajouter un produit au panier" + "\r4. Supprimer un produit du panier"
+							+ "\r5. Afficher le panier" + "\r6. Supprimer le contenu du panier" + "\r7. Passer commande"
+							+ "\r8. Retour au menu de connexion" + "\r9. Quitter");
 
 			selection = getSelection(1, 9);
 

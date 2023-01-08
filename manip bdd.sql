@@ -52,7 +52,7 @@ idpanier serial);
 
 insert into panier values (1);
 
---test affichage nomproduit prix:
+--test affichage nomproduit prix du panier:
 
 select nomproduit,prix from panier inner join produit on produit.idproduit=panier.idproduit; 
 

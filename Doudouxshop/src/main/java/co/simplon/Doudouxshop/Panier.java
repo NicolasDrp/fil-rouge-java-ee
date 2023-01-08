@@ -132,6 +132,31 @@ public class Panier {
 		}
 	}
 
+	public void AfficherPanierMenu() {
+		EntityManager em = utils.JPA.getEntityManager();
+		// the lowercase a refers to the Achat object
+		String strQuery = "SELECT a FROM Panier a WHERE a.idproduit IS NOT NULL";
+
+		// Issue the query and get a list of Achat objects
+		TypedQuery<Panier> tq = em.createQuery(strQuery, Panier.class);
+		List<Panier> paniers;
+		try {
+			// Get the list of Achat objects and output the details of each purchase
+			paniers = tq.getResultList();
+			if (paniers.isEmpty()) {
+				System.out.println("Le panier est vide");
+				Main.main(null);
+			} else {
+				paniers.forEach(panier -> System.out.println("\rNom du produit: " + panier.getIdproduit().getNom()
+						+ "\rPrix du produit: " + panier.getIdproduit().getPrix() + "€" + "\rProduit disponible: "
+						+ panier.getIdproduit().getQuantite()));
+			}
+		} catch (NoResultException ex) {
+			ex.printStackTrace();
+		} finally {
+			// em.close();
+		}
+	}
 	
 	
 	

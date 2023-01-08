@@ -363,8 +363,15 @@ public class Main {
 			case 7:
 
 				// passer commande //marche
+				System.out.println("Passer commande ?"
+						+ "\r1. Oui"
+						+ "\r2. Non");
+				selection = getSelection(1, 2);
+				if (selection == 2 ) {
+					main(null);
+				}
 				Panier cmdpanier = new Panier();
-				cmdpanier.AfficherPanier();
+				cmdpanier.AfficherPanierMenu();
 				Commande cmd = new Commande();
 				cmd.passerCommande();
 				main(null);

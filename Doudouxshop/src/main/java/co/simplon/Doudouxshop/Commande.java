@@ -53,6 +53,7 @@ public class Commande {
 			em.createNativeQuery("TRUNCATE TABLE panier").executeUpdate();
 
 			et.commit();
+			System.exit(0);
 		} catch (Exception ex) {
 			if (et != null) {
 				et.rollback();

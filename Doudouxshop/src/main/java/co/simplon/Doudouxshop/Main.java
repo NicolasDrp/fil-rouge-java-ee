@@ -85,9 +85,6 @@ public class Main {
 				System.out.println("Nom du produit: ");
 				String nommodif = scan.nextLine();
 
-				// afficher produit
-				// choix modif
-				// modif
 				Produit modif = new Produit();
 				modif.getProduitNull(nommodif);
 
